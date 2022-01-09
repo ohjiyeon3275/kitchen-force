@@ -5,9 +5,12 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.kitchenforce.domain.products.Product
 import org.junit.jupiter.api.Assertions.assertAll
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.ActiveProfiles
@@ -15,21 +18,15 @@ import javax.persistence.EntityManagerFactory
 
 @DataJpaTest
 @ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MenuProductTest @Autowired constructor(
     val emf: EntityManagerFactory
 ) {
 
     var objectmapper = ObjectMapper()
 
-    @Test
-    @DisplayName("MenuProduct의 단방향 관계 테스트")
-    fun menuProductRelationTest() {
-
-        // TODO JSR-310 이슈로 LocalDateTime 직렬화 에러 방지를 위한 설정코드
-        // 나중에 Configuration 설정 보완 예정입니다.
-
-        objectmapper.registerModule(JavaTimeModule())
-        objectmapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+    @BeforeAll
+    fun setUpData() {
         val em = emf.createEntityManager()
 
         try {
@@ -49,6 +46,17 @@ class MenuProductTest @Autowired constructor(
         } finally {
             em.clear()
         }
+    }
+
+    @Test
+    @DisplayName("MenuProduct의 단방향 관계 테스트")
+    fun menuProductRelationTest() {
+
+        // TODO JSR-310 이슈로 LocalDateTime 직렬화 에러 방지를 위한 설정코드
+        // 나중에 Configuration 설정 보완 예정입니다.
+        objectmapper.registerModule(JavaTimeModule())
+        objectmapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+        val em = emf.createEntityManager()
 
         /*
          * 쿼리 결과가 즉시 로딩(eager)
@@ -93,5 +101,46 @@ class MenuProductTest @Autowired constructor(
             { assertNotNull(result.menu) },
             { assertNotNull(result.id) }
         )
+    }
+
+    @Test
+    @DisplayName("Product 조회 테스트")
+    fun productJoinTest() {
+        objectmapper.registerModule(JavaTimeModule())
+        objectmapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+        val em = emf.createEntityManager()
+
+        val result = em.find(Product::class.java, 1)
+        println("==> ${objectmapper.writerWithDefaultPrettyPrinter().writeValueAsString(result)}")
+
+        /*
+         * Product는 아무 연관관계가 없으므로 단일 테이블 select 결과가 나와야 한다.
+         *     select
+                    product0_.id as id1_3_0_,
+                    product0_.created_at as created_2_3_0_,
+                    product0_.name as name3_3_0_,
+                    product0_.price as price4_3_0_
+                from
+                    product product0_
+                where
+                    product0_.id=?
+         */
+        assertAll(
+            { assertNotNull(result.name) },
+            { assertNotNull(result.price) },
+            { assertNotNull(result.id) },
+            { assertNotNull(result.createdAt) }
+        )
+
+        val expect = """
+            {
+              "createdAt" : "${result.createdAt}",
+              "id" : ${result.id},
+              "name" : "${result.name}",
+              "price" : ${result.price}
+            }
+        """.trimIndent()
+
+        assertEquals(expect, objectmapper.writerWithDefaultPrettyPrinter().writeValueAsString(result).trimIndent())
     }
 }

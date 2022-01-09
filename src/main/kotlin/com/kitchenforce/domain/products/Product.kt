@@ -17,7 +17,7 @@ import javax.persistence.Table
 class Product(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    val id: Int? = null,
 
     @Column
     val name: String,

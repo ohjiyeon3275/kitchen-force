@@ -9,7 +9,6 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
-import javax.persistence.OneToOne
 import javax.persistence.Table
 
 @Entity
@@ -26,8 +25,7 @@ class MenuProduct(
     @JoinColumn(name = "menu_id")
     val menu: Menu,
 
-    // TODO: Product 구현시 추가 예정
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "product_id")
     var product: Product? = null,
 ) : AuditEntity()
