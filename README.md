@@ -32,3 +32,9 @@ $ docker-compose down -v
   ```
   * windows10
     * ![windows10](./image/win10-docker-run.jpg)
+
+* ```public key retrieval is not allowed```
+  * MYSQL 8.x 버전 이후부터 mysql 클라이언트는 서버로 부터 공개키 요청이 필요함.
+  * https://stackoverflow.com/questions/50379839/connection-java-mysql-public-key-retrieval-is-not-allowed
+  * 해당 옵션을 사용하지 않고자 하려면 default 설정이 필요 
+    * jdbc url에 ```allowPublicKeyRetrieval=true``` 추가

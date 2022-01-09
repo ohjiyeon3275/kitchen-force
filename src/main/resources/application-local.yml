@@ -3,7 +3,7 @@ spring:
     activate:
       on-profile: local
   datasource:
-    url: jdbc:mysql://localhost:3311/kitchen?useSSL=false
+    url: jdbc:mysql://localhost:3311/kitchen?useSSL=false&allowPublicKeyRetrieval=true
     username: kitchenuser
     password: kitchen
     driver-class-name: com.mysql.cj.jdbc.Driver
