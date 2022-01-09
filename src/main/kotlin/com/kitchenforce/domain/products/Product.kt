@@ -23,7 +23,8 @@ class Product(
     val name: String,
 
     @Column
-    val price: Int,
+    val price: Int
+
 ) : AuditEntity() {
     init {
         checkValidPrice()
