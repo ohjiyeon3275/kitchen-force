@@ -1,21 +1,21 @@
 package com.kitchenforce.domain.menus
 
-import org.springframework.data.annotation.CreatedDate
-import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import java.util.*
-import javax.persistence.*
+import com.kitchenforce.common.entity.AuditEntity
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
+import javax.persistence.Table
 
 @Entity
 @Table
-@EntityListeners(AuditingEntityListener::class)
 class Menu(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int?,
-
-    @CreatedDate
-    @Column(updatable = false, nullable = false)
-    val createdAt: Date,
 
     @Column(nullable = false)
     val name: String,
@@ -29,4 +29,4 @@ class Menu(
     @ManyToOne
     @JoinColumn(name = "menu_group_id")
     val menuGroup: MenuGroup,
-)
+) : AuditEntity()
