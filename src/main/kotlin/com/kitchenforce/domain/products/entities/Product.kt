@@ -35,11 +35,11 @@ class Product(
 
     private fun checkValidPrice() {
         if (price <0)
-            throw ProductException.of(ProductErrorCodeType.INVALID_PRICE)
+            throw ProductException(ProductErrorCodeType.INVALID_PRICE)
     }
 
     private fun checkValidProductName() {
         if (SlangDictionary.isSlang(name))
-            throw ProductException.of(ProductErrorCodeType.INVALID_PRODUCT_NAME)
+            throw ProductException(ProductErrorCodeType.INVALID_PRODUCT_NAME)
     }
 }
