@@ -1,5 +1,8 @@
 package com.kitchenforce.domain.orderTable
 
+import com.kitchenforce.domain.orderMenu.OrderMenu
+import com.kitchenforce.domain.orders.Orders
+import com.kitchenforce.domain.orders.OrdersRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,15 +13,17 @@ import org.springframework.data.repository.findByIdOrNull
 @DataJpaTest
 class OrderTableRepositoryTest @Autowired constructor(
     val entityManager: TestEntityManager,
+    val orderMenuRepository: OrdersRepository,
+    val ordersRepository: OrdersRepository,
     val orderTableRepository: OrderTableRepository ){
 
     @Test
     fun `create`(){
-        val order1 = OrderTable(1L)
-        entityManager.persist(order1)
+        val orderInTable = OrderTable(1L)
+        entityManager.persist(orderInTable)
         entityManager.flush()
-        val found = orderTableRepository.findByIdOrNull(order1.id!!)
-        assertThat(found).isEqualTo(order1)
+        val found = orderTableRepository.findByIdOrNull(orderInTable.id!!)
+        assertThat(found).isEqualTo(orderInTable)
     }
 
     @Test
