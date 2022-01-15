@@ -8,12 +8,6 @@ plugins {
     kotlin("jvm") version "1.6.10"
     kotlin("plugin.spring") version "1.6.10"
     kotlin("plugin.jpa") version "1.6.10"
-    kotlin("plugin.allopen") version "1.6.10"
-}
-allOpen {
-    annotation("javax.persistence.Entity")
-    annotation("javax.persistence.Embeddable")
-    annotation("javax.persistence.MappedSuperclass")
 }
 
 group = "com"
@@ -30,14 +24,10 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    runtimeOnly("com.h2database:h2")
-    testImplementation("org.springframework.boot:spring-boot-starter-test") //{
-    //    exclude(module = "junit")
-    //    exclude(module = "mockito-core")
-    //}
-    //testImplementation("org.junit.jupiter:junit-jupiter-api")
-    //testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    //testImplementation("com.ninja-squad:springmockk:3.0.1")
+    implementation("mysql:mysql-connector-java")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("com.h2database:h2")
+    testImplementation("io.mockk:mockk:1.12.2")
 }
 
 tasks.withType<KotlinCompile> {
