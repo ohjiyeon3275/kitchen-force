@@ -1,4 +1,4 @@
-package com.kitchenforce.domain.orderTable
+package com.kitchenforce.domain.orders
 
 import org.springframework.data.repository.CrudRepository
 

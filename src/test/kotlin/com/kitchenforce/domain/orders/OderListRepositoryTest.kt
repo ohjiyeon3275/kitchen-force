@@ -1,6 +1,5 @@
 package com.kitchenforce.domain.orders
 
-import com.kitchenforce.domain.orderTable.OrderTable
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -9,24 +8,24 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.data.repository.findByIdOrNull
 
 @DataJpaTest
-class OdersRepositoryTest @Autowired constructor(
+class OderListRepositoryTest @Autowired constructor(
     val entityManager: TestEntityManager,
-    val ordersRepository: OrdersRepository
+    val ordersRepository: OrderListRepository
 ) {
 
     @Test
-    fun `create`(){
+    fun create(){
         val orderInTable = OrderTable(1L)
         entityManager.persist(orderInTable)
-        val orders = Orders("포장",10000L,"카드결제","30분후에 가지러갈게요.",orderInTable,1L)
-        entityManager.persist(orders)
+        val orderList = OrderList("포장",10000L,"카드결제","30분후에 가지러갈게요.",orderInTable,1L)
+        entityManager.persist(orderList)
         entityManager.flush()
-        val found = ordersRepository.findByIdOrNull(orders.id!!)
-        assertThat(found).isEqualTo(orders)
+        val found = ordersRepository.findByIdOrNull(orderList.id!!)
+        assertThat(found).isEqualTo(orderList)
     }
 
     @Test
-    fun `read`(){
+    fun read(){
         val newOrders = ordersRepository.findById(1L)
         System.out.println(newOrders)
     }
