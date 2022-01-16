@@ -1,6 +1,8 @@
-package com.kitchenforce.domain.products
+package com.kitchenforce.domain.products.entities
 
 import com.kitchenforce.common.utils.SlangDictionary
+import com.kitchenforce.domain.products.exception.ProductErrorCodeType
+import com.kitchenforce.domain.products.exception.ProductException
 import io.mockk.every
 import io.mockk.mockkObject
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -58,19 +60,21 @@ internal class ProductEntityTest @Autowired constructor(
     @DisplayName("상품명에 비속어가 들어가면 상품 등록이 되어서는 안된다.")
     fun productNameValidation() {
         every { SlangDictionary.isSlang(any()) } returns true
-        val exception = assertThrows<IllegalArgumentException> {
+        val exception = assertThrows<ProductException> {
             Product(null, "개똥", 100)
         }
         println("Exception = ${exception.message}")
+        assertEquals(ProductErrorCodeType.INVALID_PRODUCT_NAME.errorMessage, exception.errorMessage)
     }
 
     @Test
     @DisplayName("상품가격이 0보다 작으면 상품 등록이 되어서는 안된다.")
     fun productPriceValidation() {
-        val exception = assertThrows<IllegalArgumentException> {
+        val exception = assertThrows<ProductException> {
             every { SlangDictionary.isSlang(any()) } returns true
             Product(null, "비정상제품", -1)
         }
         println("Exception = ${exception.message}")
+        assertEquals(ProductErrorCodeType.INVALID_PRICE.errorMessage, exception.errorMessage)
     }
 }

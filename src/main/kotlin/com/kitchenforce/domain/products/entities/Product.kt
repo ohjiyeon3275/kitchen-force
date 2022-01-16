@@ -1,7 +1,9 @@
-package com.kitchenforce.domain.products
+package com.kitchenforce.domain.products.entities
 
 import com.kitchenforce.common.entity.AuditEntity
 import com.kitchenforce.common.utils.SlangDictionary
+import com.kitchenforce.domain.products.exception.ProductErrorCodeType
+import com.kitchenforce.domain.products.exception.ProductException
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -31,14 +33,13 @@ class Product(
         checkValidProductName()
     }
 
-    // TODO : 비즈니스 로직 관련 Exception 구현체가 필요한 것 같습니다. 일단 임시로 IllegalArgumentException 사용.
     private fun checkValidPrice() {
         if (price <0)
-            throw IllegalArgumentException("상품의 가격은 0 미만이 될 수 없습니다.[$price]")
+            throw ProductException(ProductErrorCodeType.INVALID_PRICE)
     }
 
     private fun checkValidProductName() {
         if (SlangDictionary.isSlang(name))
-            throw IllegalArgumentException("상품 이름에 비속어는 포함될 수 없습니다.[$name]")
+            throw ProductException(ProductErrorCodeType.INVALID_PRODUCT_NAME)
     }
 }

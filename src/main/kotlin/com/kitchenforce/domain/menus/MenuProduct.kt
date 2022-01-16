@@ -1,7 +1,7 @@
 package com.kitchenforce.domain.menus
 
 import com.kitchenforce.common.entity.AuditEntity
-import com.kitchenforce.domain.products.Product
+import com.kitchenforce.domain.products.entities.Product
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
