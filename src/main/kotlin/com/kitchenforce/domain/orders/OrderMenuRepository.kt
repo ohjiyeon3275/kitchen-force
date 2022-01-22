@@ -1,6 +1,6 @@
 package com.kitchenforce.domain.orders
 
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.jpa.repository.JpaRepository
 
-interface OrderMenuRepository: CrudRepository<OrderMenu, Long> {
+interface OrderMenuRepository: JpaRepository<OrderMenu, Long> {
 }
