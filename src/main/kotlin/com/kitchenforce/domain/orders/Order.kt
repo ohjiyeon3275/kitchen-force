@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-class OrderList(
+class Order(
     @Column
     var orderType: String,
 
@@ -24,7 +24,9 @@ class OrderList(
 
     // @OneToMany(fetch = FetchType.LAZY) val OrderMenuList : List<OrderMenu>,
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    var id: Long? = null,
 
     @Column
     var orderTime: LocalDateTime = LocalDateTime.now()
