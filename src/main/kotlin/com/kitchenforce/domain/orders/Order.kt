@@ -22,7 +22,8 @@ class Order(
     @JoinColumn(name = "order_table_id")
     var orderTable: OrderTable,
 
-    // @OneToMany(fetch = FetchType.LAZY) val OrderMenuList : List<OrderMenu>,
+    @OneToMany(fetch = FetchType.LAZY) 
+    val orderMenuList : List<OrderMenu>,
 
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
