@@ -6,9 +6,18 @@ import javax.persistence.*
 @Entity
 class OrderTable(
 
+    @Column
     var userId: Long,
+    
+    @Column
+    var emptyness: Boolean,
 
-    // @OneToMany(fetch = FetchType.LAZY) val ordersList: List<Orders>,
+    @Column
+    var numberOfGuests: Int,
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null
+    // @OneToMany(fetch = FetchType.LAZY) val orderList: List<Order>,
+
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    var id: Long? = null
 ) : AuditEntity()
