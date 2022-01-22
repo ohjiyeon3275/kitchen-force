@@ -1,8 +1,8 @@
 package com.kitchenforce.domain.orders
 
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.repository.JpaRepository
 
-interface OrderTableRepository: CrudRepository<OrderTable, Long> {
+interface OrderTableRepository: JpaRepository<OrderTable, Long> {
 
     fun findByUserId(userId : Long): OrderTable
 
