@@ -8,17 +8,14 @@ import javax.persistence.*
 class OrderMenu(
 
     @Column
-    var menu: String,
-
-    @Column
     var price: Long,
 
     @Column
     var quantity: Long,
 
     @ManyToOne
-    @JoinColumn(name = "order_list_id")
-    var orderList: OrderList,
+    @JoinColumn(name = "order_id")
+    var order: Order,
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null
 ) : AuditEntity()
