@@ -1,7 +1,7 @@
 package com.kitchenforce.domain.orders
 
 import com.kitchenforce.common.entity.AuditEntity
-import com.kitchenforce.domain.orders.OrderList
+import com.kitchenforce.domain.orders.Order
 import javax.persistence.*
 
 @Entity
