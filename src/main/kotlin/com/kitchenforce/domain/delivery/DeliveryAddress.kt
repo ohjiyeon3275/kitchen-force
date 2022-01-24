@@ -11,16 +11,16 @@ class DeliveryAddress (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int,
 
-    @Column(nullable = false)
+    @Column(name="address", nullable = false)
     val address: String,
 
-    @Column(nullable = false)
-    val phone_number : String,
+    @Column(name="phone_number", nullable = false)
+    val phoneNumber : String,
 
-    @Column(nullable = false)
+    @Column(name="note")
     val note: String,
 
-    @Column(nullable=false)
+    @Column(name="rider", nullable=false)
     val rider: String
 
 ):AuditEntity()
