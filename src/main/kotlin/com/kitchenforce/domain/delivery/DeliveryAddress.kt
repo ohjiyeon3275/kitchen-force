@@ -15,9 +15,9 @@ class DeliveryAddress (
     val address: String,
 
     @Column(nullable = false)
-    val phone_number : String,
+    val phoneNumber : String,
 
-    @Column(nullable = false)
+    @Column
     val note: String,
 
     @Column(nullable=false)
