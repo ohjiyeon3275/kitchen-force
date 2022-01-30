@@ -8,6 +8,9 @@ class OrderTable(
 
     @Column
     var userId: Long,
+
+    @Column
+    var name: String,
     
     @Column
     var emptyness: Boolean,
@@ -15,7 +18,8 @@ class OrderTable(
     @Column
     var numberOfGuests: Int,
 
-    // @OneToMany(fetch = FetchType.LAZY) val orderList: List<Order>,
+    @OneToMany(fetch = FetchType.LAZY)
+    var orderList: MutableList<Order> = ArrayList(),
 
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY) 

@@ -18,12 +18,15 @@ class Order(
     @Column
     var requirement: String,
 
+    @Column
+    var deliveryAddress: String,
+
     @ManyToOne
     @JoinColumn(name = "order_table_id")
     var orderTable: OrderTable,
 
     @OneToMany(fetch = FetchType.LAZY) 
-    val orderMenuList : List<OrderMenu>,
+    var orderMenuList : MutableList<OrderMenu> = ArrayList(),
 
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
