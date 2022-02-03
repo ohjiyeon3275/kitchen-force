@@ -1,8 +1,13 @@
 package com.kitchenforce.domain.orders
 
 import com.kitchenforce.common.entity.AuditEntity
-import com.kitchenforce.domain.orders.Order
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
 
 @Entity
 class OrderMenu(
@@ -11,11 +16,11 @@ class OrderMenu(
     var price: Long,
 
     @Column
-    var quantity: Long,
+    private var quantity: Long,
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
-    var order: Order,
+    @JoinColumn(name = "orders_id")
+    var order: Order?,
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null
 ) : AuditEntity()
