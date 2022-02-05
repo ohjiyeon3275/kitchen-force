@@ -11,7 +11,7 @@ class DeliveryAddress (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int,
 
-    @Column(nullable = false)
+    @Column(name="address", nullable = false)
     val address: String,
 
     @Column(nullable = false)
