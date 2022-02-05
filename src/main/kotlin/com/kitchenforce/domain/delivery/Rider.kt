@@ -5,22 +5,21 @@ import javax.persistence.*
 
 @Entity
 @Table
-class DeliveryAddress (
+class Rider (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int,
 
-    @Column(nullable = false)
-    val address: String,
 
     @Column(nullable = false)
-    val customerPhoneNumber : String,
+    val name : String,
 
     @Column(nullable = false)
-    val status: String,
+    val phoneNumber : String,
 
-    @Column
-    val note: String,
+    @ManyToOne
+    @JoinColumn(name = "delivery_address_id")
+    val deliveryAddress: DeliveryAddress
 
-):AuditEntity()
+): AuditEntity()
