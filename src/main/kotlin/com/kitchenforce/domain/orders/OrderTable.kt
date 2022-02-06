@@ -1,23 +1,31 @@
 package com.kitchenforce.domain.orders
 
 import com.kitchenforce.common.entity.AuditEntity
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.OneToMany
 
 @Entity
 class OrderTable(
 
     @Column
     var userId: Long,
-    
+
     @Column
     var emptyness: Boolean,
 
     @Column
     var numberOfGuests: Int,
 
-    // @OneToMany(fetch = FetchType.LAZY) val orderList: List<Order>,
-
-    @Id 
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-) : AuditEntity()
+) : AuditEntity() {
+
+    @OneToMany(fetch = FetchType.LAZY)
+    lateinit var orderList: List<Order>
+}

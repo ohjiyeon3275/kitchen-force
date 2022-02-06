@@ -1,26 +1,30 @@
 package com.kitchenforce.domain.orders
 
-import com.kitchenforce.domain.orders.OrderListRepository
-import com.kitchenforce.domain.orders.OrderTable
-import com.kitchenforce.domain.orders.OrderTableRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.transaction.annotation.Transactional
 
 @DataJpaTest
+@ActiveProfiles("test")
 class OrderTableRepositoryTest @Autowired constructor(
     val entityManager: TestEntityManager,
-    val orderMenuRepository: OrderListRepository,
-    val ordersRepository: OrderListRepository,
     val orderTableRepository: OrderTableRepository
-){
+) {
 
     @Test
-    fun create(){
-        val orderInTable = OrderTable(1L)
+    @Transactional
+    fun create() {
+        val orderInTable = OrderTable(
+            userId = 1L,
+            emptyness = true,
+            numberOfGuests = 3
+        )
+
         entityManager.persist(orderInTable)
         entityManager.flush()
         val found = orderTableRepository.findByIdOrNull(orderInTable.id!!)
@@ -28,9 +32,20 @@ class OrderTableRepositoryTest @Autowired constructor(
     }
 
     @Test
-    fun read(){
-        val newOrder =orderTableRepository.findById(1L)
+    @Transactional
+    fun read() {
+
+        val orderInTable = OrderTable(
+            userId = 1L,
+            emptyness = true,
+            numberOfGuests = 3
+        )
+
+        val savedTable = entityManager.persist(orderInTable)
+        entityManager.flush()
+        entityManager.clear()
+
+        val newOrder = orderTableRepository.findById(savedTable.id!!)
         System.out.println(newOrder)
     }
-
 }

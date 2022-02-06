@@ -6,27 +6,69 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.transaction.annotation.Transactional
 
 @DataJpaTest
+@ActiveProfiles("test")
 class OderListRepositoryTest @Autowired constructor(
     val entityManager: TestEntityManager,
-    val ordersRepository: OrderListRepository
+    val ordersRepository: OrderRepository
 ) {
 
     @Test
-    fun create(){
-        val orderInTable = OrderTable(1L)
+    @Transactional
+    fun create() {
+        val orderInTable = OrderTable(
+            userId = 1L,
+            emptyness = true,
+            numberOfGuests = 3
+        )
+
+        // orderTable의 PK를 알아야함.
+        val savedOrderTable = entityManager.persist(orderInTable)
+
+        val order = Order(
+            "포장",
+            10000L,
+            "카드결제",
+            "30분후에 가지러갈게요.",
+            savedOrderTable,
+            emptyList()
+        )
+
+        val savedOrder = entityManager.persist(order)
+
+        orderInTable.orderList = listOf(savedOrder)
+
         entityManager.persist(orderInTable)
-        val orderList = OrderList("포장",10000L,"카드결제","30분후에 가지러갈게요.",orderInTable,1L)
-        entityManager.persist(orderList)
+
+        val orderMenu = OrderMenu(
+            id = null,
+            price = 1000L,
+            quantity = 10L,
+            order = savedOrder
+        )
+
+        val orderMenuList = listOf(
+            orderMenu
+        )
+
+        savedOrder.orderMenuList = orderMenuList
+
+        entityManager.persist(savedOrder)
+        entityManager.persist(orderMenu)
         entityManager.flush()
-        val found = ordersRepository.findByIdOrNull(orderList.id!!)
-        assertThat(found).isEqualTo(orderList)
+//        entityManager.clear()
+
+        val found = ordersRepository.findByIdOrNull(order.id)
+        assertThat(found).isEqualTo(order)
+//        assertThat(found!!.id).isEqualTo(order.id)
     }
 
     @Test
-    fun read(){
+    fun read() {
         val newOrders = ordersRepository.findById(1L)
-        System.out.println(newOrders)
+        println(newOrders)
     }
 }
