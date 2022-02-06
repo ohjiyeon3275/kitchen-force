@@ -18,10 +18,10 @@ class OrderTable(
     @Column
     var numberOfGuests: Int,
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "orderTable")
     var orderList: MutableList<Order> = ArrayList(),
 
     @Id 
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 ) : AuditEntity()

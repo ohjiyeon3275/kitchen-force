@@ -2,11 +2,10 @@ package com.kitchenforce.domain.orders.dto
 
 
 data class OrderTableDto (
-    internal val userId: Long,
-    internal val emptyness: Boolean,
-    internal val tableName: String,
-    internal val numberOfGuests: Int,
-
-    internal val orderList: List<OrderDto>
+    var userId: Long = 0,
+    var emptyness: Boolean = true,
+    var tableName: String = "",
+    var numberOfGuests: Int = 0,
+    var orderDtoList: MutableList<OrderDto> = ArrayList()
         ){
 }

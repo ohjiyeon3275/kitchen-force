@@ -1,11 +1,11 @@
 package com.kitchenforce.domain.orders.dto
 
 data class OrderDto (
-    internal val orderType: String,
-    internal val paymentMethod: String,
-    internal val requirement: String,
-    internal val deliveryAddress: String,
-    internal val orderMenuList: List<OrderMenuDto>
+    var orderType: String ="",
+    var paymentMethod: String="",
+    var requirement: String="",
+    var deliveryAddress: String="",
+    var orderMenuDtoList: MutableList<OrderMenuDto> = ArrayList()
         ){
 
 

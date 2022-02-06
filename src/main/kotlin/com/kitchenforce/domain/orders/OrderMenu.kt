@@ -12,7 +12,7 @@ class OrderMenu(
     var quantity: Long,
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "orders_id")
     var order: Order,
 
     @ManyToOne

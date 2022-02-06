@@ -3,6 +3,8 @@ package com.kitchenforce.service
 import com.kitchenforce.domain.menus.Menu
 import com.kitchenforce.domain.menus.MenuRepository
 import com.kitchenforce.domain.orders.*
+import com.kitchenforce.domain.orders.dto.OrderDto
+import com.kitchenforce.domain.orders.dto.OrderMenuDto
 import com.kitchenforce.domain.orders.dto.OrderTableDto
 import org.springframework.stereotype.Service
 
@@ -13,6 +15,7 @@ class OrderTableService (
     private val orderMenuRepository: OrderMenuRepository,
     private val menuRepository: MenuRepository
         ){
+
     fun create(dto: OrderTableDto) {
         val orderTable: OrderTable = OrderTable(
             userId = dto.userId,
@@ -20,34 +23,69 @@ class OrderTableService (
             emptyness = dto.emptyness,
             numberOfGuests = dto.numberOfGuests
         )
+        orderTableRepository.save(orderTable)
 
-        for (orders in dto.orderList) {
+        for (orderDto in dto.orderDtoList) {
 
             val order: Order = Order(
-                orderType = orders.orderType,
+                orderType = orderDto.orderType,
                 paymentPrice = 0,
-                paymentMethod = orders.paymentMethod,
-                requirement = orders.requirement,
-                deliveryAddress = orders.deliveryAddress,
+                paymentMethod = orderDto.paymentMethod,
+                requirement = orderDto.requirement,
+                deliveryAddress = orderDto.deliveryAddress,
                 orderTable = orderTable
             )
-            //entity가 데이터 클래스가 아니어도 접근 및 값 수정 가능한것인가 ?
-            orderTable.orderList.add(order)
+            orderRepository.save(order)
 
-            for(orderMenus in orders.orderMenuList) {
+            for(orderMenuDto in orderDto.orderMenuDtoList) {
 
-                val menu: Menu = menuRepository.findByName(orderMenus.menuName)
+                val menu: Menu = menuRepository.findByName(orderMenuDto.menuName)
                 val orderMenu: OrderMenu = OrderMenu(
-                    quantity = orderMenus.quantity,
+                    quantity = orderMenuDto.quantity,
                     order = order,
                     menu = menu
                 )
-                order.orderMenuList.add(orderMenu)
-
                 orderMenuRepository.save(orderMenu)
             }
-            orderRepository.save(order)
         }
-        orderTableRepository.save(orderTable)
+    }
+
+    fun orderInfo(userId: Long) : OrderTableDto {
+
+        val orderTable: OrderTable? = orderTableRepository.findByUserId(userId)
+
+        var orderTableDto: OrderTableDto = OrderTableDto(
+            userId = orderTable!!.userId,
+            emptyness = orderTable.emptyness,
+            tableName = orderTable.name,
+            numberOfGuests = orderTable.numberOfGuests
+        )
+
+        val orderList: MutableList<Order> = orderTable!!.orderList
+
+        for(order in orderList) {
+
+            var orderDto: OrderDto = OrderDto(
+                orderType = order.orderType,
+                paymentMethod = order.paymentMethod,
+                requirement = order.requirement,
+                deliveryAddress = order.deliveryAddress
+            )
+
+            val orderMenuList: MutableList<OrderMenu> = order.orderMenuList
+
+            for (orderMenu in orderMenuList) {
+
+                var orderMenuDto: OrderMenuDto = OrderMenuDto(
+                    quantity = orderMenu.quantity,
+                    menuName = orderMenu.menu.name
+                )
+
+                orderDto.orderMenuDtoList.add(orderMenuDto)
+            }
+
+            orderTableDto.orderDtoList.add(orderDto)
+        }
+        return orderTableDto
     }
 }
