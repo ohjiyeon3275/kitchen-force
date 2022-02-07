@@ -35,11 +35,12 @@ class Order(
     @JoinColumn(name = "order_table_id")
     var orderTable: OrderTable,
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
-    var orderMenuList : MutableList<OrderMenu> = ArrayList(),
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-) : AuditEntity()
+) : AuditEntity() {
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    lateinit var orderMenuList: List<OrderMenu>
+}

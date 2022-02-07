@@ -24,12 +24,12 @@ class OrderTable(
     @Column
     var numberOfGuests: Int,
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "orderTable")
-    var orderList: MutableList<Order> = ArrayList(),
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 ) : AuditEntity() {
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "orderTable")
+    lateinit var orderList: List<Order>
 
 }

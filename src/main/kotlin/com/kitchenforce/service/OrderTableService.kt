@@ -54,38 +54,44 @@ class OrderTableService (
 
         val orderTable: OrderTable? = orderTableRepository.findByUserId(userId)
 
-        var orderTableDto: OrderTableDto = OrderTableDto(
-            userId = orderTable!!.userId,
-            emptyness = orderTable.emptyness,
-            tableName = orderTable.name,
-            numberOfGuests = orderTable.numberOfGuests
+        val orderTableDtoNothing: OrderTableDto = OrderTableDto(
+            userId = -1,
+            emptyness = true,
+            tableName = "-1",
+            numberOfGuests = -1
         )
 
-        val orderList: MutableList<Order> = orderTable!!.orderList
-
-        for(order in orderList) {
-
-            var orderDto: OrderDto = OrderDto(
-                orderType = order.orderType,
-                paymentMethod = order.paymentMethod,
-                requirement = order.requirement,
-                deliveryAddress = order.deliveryAddress
+        orderTable?.let {
+            val orderTableDto: OrderTableDto = OrderTableDto(
+                userId = orderTable.userId,
+                emptyness = orderTable.emptyness,
+                tableName = orderTable.name,
+                numberOfGuests = orderTable.numberOfGuests
             )
+            val orderList: List<Order> = orderTable.orderList
 
-            val orderMenuList: MutableList<OrderMenu> = order.orderMenuList
+            for (order in orderList) {
 
-            for (orderMenu in orderMenuList) {
-
-                var orderMenuDto: OrderMenuDto = OrderMenuDto(
-                    quantity = orderMenu.quantity,
-                    menuName = orderMenu.menu.name
+                val orderDto: OrderDto = OrderDto(
+                    orderType = order.orderType,
+                    paymentMethod = order.paymentMethod,
+                    requirement = order.requirement,
+                    deliveryAddress = order.deliveryAddress
                 )
 
-                orderDto.orderMenuDtoList.add(orderMenuDto)
-            }
+                val orderMenuList: List<OrderMenu> = order.orderMenuList
 
-            orderTableDto.orderDtoList.add(orderDto)
-        }
-        return orderTableDto
+                for (orderMenu in orderMenuList) {
+
+                    val orderMenuDto: OrderMenuDto = OrderMenuDto(
+                        quantity = orderMenu.quantity,
+                        menuName = orderMenu.menu.name
+                    )
+                    orderDto.orderMenuDtoList.add(orderMenuDto)
+                }
+                orderTableDto.orderDtoList.add(orderDto)
+            }
+            return orderTableDto
+        }?:return orderTableDtoNothing
     }
 }
