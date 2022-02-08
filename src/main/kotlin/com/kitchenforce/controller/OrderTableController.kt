@@ -6,17 +6,17 @@ import org.springframework.web.bind.annotation.*
 
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api/order-table")
 class OrderController (
     private val orderTableService: OrderTableService
 ){
 
-    @PostMapping("/createTable")
+    @PostMapping("")
     fun createOrderTable(@RequestBody dto: OrderTableDto){
         orderTableService.create(dto);
     }
 
-    @GetMapping("/order_info/{userId}")
+    @GetMapping("/order-info/{userId}")
     fun orderInfo(@PathVariable userId: Long): OrderTableDto{
         return orderTableService.orderInfo(userId);
     }
