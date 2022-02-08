@@ -7,6 +7,8 @@ import com.kitchenforce.domain.orders.dto.OrderDto
 import com.kitchenforce.domain.orders.dto.OrderMenuDto
 import com.kitchenforce.domain.orders.dto.OrderTableDto
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+
 
 @Service
 class OrderTableService (
@@ -16,6 +18,7 @@ class OrderTableService (
     private val menuRepository: MenuRepository
         ){
 
+    @Transactional
     fun create(dto: OrderTableDto) {
         val orderTable: OrderTable = OrderTable(
             userId = dto.userId,
@@ -37,6 +40,7 @@ class OrderTableService (
             )
             orderRepository.save(order)
 
+            val orderMenus: MutableList<OrderMenu> = ArrayList()
             for(orderMenuDto in orderDto.orderMenuDtoList) {
 
                 val menu: Menu = menuRepository.findByName(orderMenuDto.menuName)
@@ -45,8 +49,9 @@ class OrderTableService (
                     order = order,
                     menu = menu
                 )
-                orderMenuRepository.save(orderMenu)
+                orderMenus.add(orderMenu)
             }
+            orderMenuRepository.saveAll(orderMenus)
         }
     }
 
