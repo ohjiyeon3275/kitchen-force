@@ -16,6 +16,9 @@ class OrderTable(
     var userId: Long,
 
     @Column
+    var name: String,
+
+    @Column
     var emptyness: Boolean,
 
     @Column
@@ -26,6 +29,7 @@ class OrderTable(
     var id: Long? = null
 ) : AuditEntity() {
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "orderTable")
     lateinit var orderList: List<Order>
+
 }

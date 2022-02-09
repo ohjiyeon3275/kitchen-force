@@ -28,17 +28,19 @@ class Order(
     @Column
     var requirement: String,
 
+    @Column
+    var deliveryAddress: String,
+
     @ManyToOne
     @JoinColumn(name = "order_table_id")
     var orderTable: OrderTable,
-
-    @OneToMany(fetch = FetchType.LAZY)
-    var orderMenuList: List<OrderMenu>?,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    @Column
-    var orderTime: LocalDateTime = LocalDateTime.now()
-) : AuditEntity()
+) : AuditEntity() {
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+    lateinit var orderMenuList: List<OrderMenu>
+}

@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
-@Table
+@Table(name = "menu")
 class Menu(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,4 +29,5 @@ class Menu(
     @ManyToOne
     @JoinColumn(name = "menu_group_id")
     val menuGroup: MenuGroup,
+
 ) : AuditEntity()
