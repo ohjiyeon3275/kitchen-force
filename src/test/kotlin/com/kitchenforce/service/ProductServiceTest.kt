@@ -17,11 +17,10 @@ internal class ProductServiceTest @Autowired constructor(
     private val service: ProductService
 ) {
 
-    // TODO : 요거 ktLint에서 빨간줄 뜨는데 혹시 확인 가능하실까요?
     @Nested
+    @Transactional
     inner class ProductServiceCreateTest {
         @Test
-        @Transactional
         fun create_정상실행() {
             val vo = Product(
                 name = "제품1",
@@ -35,7 +34,6 @@ internal class ProductServiceTest @Autowired constructor(
         }
 
         @Test
-        @Transactional
         fun create_가격_음수() {
             val vo = Product(
                 name = "제품1",
