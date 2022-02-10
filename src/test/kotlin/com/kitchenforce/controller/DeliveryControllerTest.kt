@@ -1,6 +1,5 @@
-package com.kitchenforce.domain.delivery
+package com.kitchenforce.controller
 
-import com.kitchenforce.controller.DeliveryController
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,10 +10,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-class DeliveryAddressTest {
+class DeliveryControllerTest {
 
     @Autowired
     lateinit var deliveryController: DeliveryController
@@ -23,9 +21,8 @@ class DeliveryAddressTest {
     lateinit var mvc: MockMvc
 
     @BeforeEach
-    fun setUp(){
+    fun setUp() {
         mvc = MockMvcBuilders.standaloneSetup(deliveryController).build()
-
     }
 
     @Test
@@ -34,7 +31,5 @@ class DeliveryAddressTest {
         mvc.perform(MockMvcRequestBuilders.get("/api/delivery/get"))
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().string("hello get mapping :D"))
-
     }
-
 }

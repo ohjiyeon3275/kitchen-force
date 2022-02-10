@@ -2,21 +2,25 @@ package com.kitchenforce.service
 
 import com.kitchenforce.domain.menus.Menu
 import com.kitchenforce.domain.menus.MenuRepository
-import com.kitchenforce.domain.orders.*
+import com.kitchenforce.domain.orders.Order
+import com.kitchenforce.domain.orders.OrderMenu
+import com.kitchenforce.domain.orders.OrderMenuRepository
+import com.kitchenforce.domain.orders.OrderRepository
+import com.kitchenforce.domain.orders.OrderTable
+import com.kitchenforce.domain.orders.OrderTableRepository
 import com.kitchenforce.domain.orders.dto.OrderDto
 import com.kitchenforce.domain.orders.dto.OrderMenuDto
 import com.kitchenforce.domain.orders.dto.OrderTableDto
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-
 @Service
-class OrderTableService (
+class OrderTableService(
     private val orderTableRepository: OrderTableRepository,
     private val orderRepository: OrderRepository,
     private val orderMenuRepository: OrderMenuRepository,
     private val menuRepository: MenuRepository
-        ){
+) {
 
     @Transactional
     fun create(dto: OrderTableDto) {
@@ -26,7 +30,8 @@ class OrderTableService (
             emptyness = dto.emptyness,
             numberOfGuests = dto.numberOfGuests
         )
-        orderTableRepository.save(orderTable)
+
+        val savedOrder = orderTableRepository.save(orderTable)
 
         for (orderDto in dto.orderDtoList) {
 
@@ -41,7 +46,7 @@ class OrderTableService (
             orderRepository.save(order)
 
             val orderMenus: MutableList<OrderMenu> = ArrayList()
-            for(orderMenuDto in orderDto.orderMenuDtoList) {
+            for (orderMenuDto in orderDto.orderMenuDtoList) {
 
                 val menu: Menu = menuRepository.findByName(orderMenuDto.menuName)
                 val orderMenu: OrderMenu = OrderMenu(
@@ -55,7 +60,7 @@ class OrderTableService (
         }
     }
 
-    fun orderInfo(userId: Long) : OrderTableDto {
+    fun orderInfo(userId: Long): OrderTableDto {
 
         val orderTable: OrderTable? = orderTableRepository.findByUserId(userId)
 
@@ -73,30 +78,32 @@ class OrderTableService (
                 tableName = orderTable.name,
                 numberOfGuests = orderTable.numberOfGuests
             )
-            val orderList: List<Order> = orderTable.orderList
+            val orderList: List<Order>? = orderTable.orderList
 
-            for (order in orderList) {
+            if (orderList != null) {
+                for (order in orderList) {
 
-                val orderDto: OrderDto = OrderDto(
-                    orderType = order.orderType,
-                    paymentMethod = order.paymentMethod,
-                    requirement = order.requirement,
-                    deliveryAddress = order.deliveryAddress
-                )
-
-                val orderMenuList: List<OrderMenu> = order.orderMenuList
-
-                for (orderMenu in orderMenuList) {
-
-                    val orderMenuDto: OrderMenuDto = OrderMenuDto(
-                        quantity = orderMenu.quantity,
-                        menuName = orderMenu.menu.name
+                    val orderDto: OrderDto = OrderDto(
+                        orderType = order.orderType,
+                        paymentMethod = order.paymentMethod,
+                        requirement = order.requirement,
+                        deliveryAddress = order.deliveryAddress
                     )
-                    orderDto.orderMenuDtoList.add(orderMenuDto)
+
+                    val orderMenuList: List<OrderMenu> = order.orderMenuList
+
+                    for (orderMenu in orderMenuList) {
+
+                        val orderMenuDto: OrderMenuDto = OrderMenuDto(
+                            quantity = orderMenu.quantity,
+                            menuName = orderMenu.menu?.name ?: "메뉴 네임 미정"
+                        )
+                        orderDto.orderMenuDtoList.add(orderMenuDto)
+                    }
+                    orderTableDto.orderDtoList.add(orderDto)
                 }
-                orderTableDto.orderDtoList.add(orderDto)
             }
             return orderTableDto
-        }?:return orderTableDtoNothing
+        } ?: return orderTableDtoNothing
     }
 }

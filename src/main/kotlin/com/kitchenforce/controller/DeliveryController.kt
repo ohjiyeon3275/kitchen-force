@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 class DeliveryController {
 
     @GetMapping("/get")
-    fun hello(): String{
+    fun hello(): String {
         return "hello get mapping :D"
     }
-
 }

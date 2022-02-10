@@ -3,27 +3,30 @@ package com.kitchenforce.domain.menus
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.kitchenforce.configuration.ObjectMapperConfig
 import com.kitchenforce.domain.products.entities.Product
 import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import javax.persistence.EntityManagerFactory
 
 @DataJpaTest
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Import(ObjectMapperConfig::class)
 class MenuProductTest @Autowired constructor(
-    val emf: EntityManagerFactory
+    val emf: EntityManagerFactory,
+    @Qualifier("commonObjectMapper")
+    val objectMapper: ObjectMapper
 ) {
-
-    var objectmapper = ObjectMapper()
 
     @BeforeAll
     fun setUpData() {
@@ -31,6 +34,21 @@ class MenuProductTest @Autowired constructor(
 
         try {
             em.transaction.begin()
+
+            // H2 DB Table의 PK를 1로 초기화 시키기 위한 Truncate DDL
+            // H2 DB 특성상 ALTER TABLE RESTART 문 실행을 위해 REFERENTIAL_INTEGRITY 속성을 FALSE로 바꾸어 주어야 하는듯 함.
+            em.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate()
+            em.createNativeQuery("TRUNCATE TABLE product RESTART IDENTITY;").executeUpdate()
+            em.createNativeQuery("ALTER TABLE product ALTER COLUMN id RESTART WITH 1;")
+                .executeUpdate()
+            em.createNativeQuery("TRUNCATE TABLE menu RESTART IDENTITY;").executeUpdate()
+            em.createNativeQuery("ALTER TABLE menu ALTER COLUMN id RESTART WITH 1;")
+                .executeUpdate()
+            em.createNativeQuery("TRUNCATE TABLE menu_product RESTART IDENTITY;").executeUpdate()
+            em.createNativeQuery("ALTER TABLE menu_product ALTER COLUMN id RESTART WITH 1;")
+                .executeUpdate()
+            em.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate()
+
             val menuGroup = MenuGroup(null, "샘플 매뉴 그룹")
             em.persist(menuGroup)
             val menu = Menu(null, "샘플 매뉴", 100, false, menuGroup)
@@ -52,10 +70,6 @@ class MenuProductTest @Autowired constructor(
     @DisplayName("MenuProduct의 단방향 관계 테스트")
     fun menuProductRelationTest() {
 
-        // TODO JSR-310 이슈로 LocalDateTime 직렬화 에러 방지를 위한 설정코드
-        // 나중에 Configuration 설정 보완 예정입니다.
-        objectmapper.registerModule(JavaTimeModule())
-        objectmapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         val em = emf.createEntityManager()
 
         /*
@@ -94,7 +108,7 @@ class MenuProductTest @Autowired constructor(
                     menuproduc0_.id=?
          */
         val result = em.find(MenuProduct::class.java, 1)
-        println("==> ${objectmapper.writerWithDefaultPrettyPrinter().writeValueAsString(result)}")
+        println("==> ${objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result)}")
 
         assertAll(
             { assertNotNull(result.product) },
@@ -106,12 +120,12 @@ class MenuProductTest @Autowired constructor(
     @Test
     @DisplayName("Product 조회 테스트")
     fun productJoinTest() {
-        objectmapper.registerModule(JavaTimeModule())
-        objectmapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+        objectMapper.registerModule(JavaTimeModule())
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         val em = emf.createEntityManager()
 
-        val result = em.find(Product::class.java, 1)
-        println("==> ${objectmapper.writerWithDefaultPrettyPrinter().writeValueAsString(result)}")
+        val result = em.find(Product::class.java, 1L)
+        println("==> ${objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result)}")
 
         /*
          * Product는 아무 연관관계가 없으므로 단일 테이블 select 결과가 나와야 한다.
@@ -131,16 +145,5 @@ class MenuProductTest @Autowired constructor(
             { assertNotNull(result.id) },
             { assertNotNull(result.createdAt) }
         )
-
-        val expect = """
-            {
-              "createdAt" : "${result.createdAt}",
-              "id" : ${result.id},
-              "name" : "${result.name}",
-              "price" : ${result.price}
-            }
-        """.trimIndent()
-
-        assertEquals(expect, objectmapper.writerWithDefaultPrettyPrinter().writeValueAsString(result).trimIndent())
     }
 }

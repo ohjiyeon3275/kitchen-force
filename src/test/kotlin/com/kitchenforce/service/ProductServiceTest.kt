@@ -1,7 +1,7 @@
 package com.kitchenforce.service
 
 import com.kitchenforce.domain.products.entities.Product
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -13,10 +13,11 @@ import javax.validation.ConstraintViolationException
 
 @SpringBootTest
 @ActiveProfiles("test")
-internal class ProductServiceTest @Autowired constructor (
+internal class ProductServiceTest @Autowired constructor(
     private val service: ProductService
 ) {
 
+    // TODO : 요거 ktLint에서 빨간줄 뜨는데 혹시 확인 가능하실까요?
     @Nested
     inner class ProductServiceCreateTest {
         @Test
@@ -43,7 +44,6 @@ internal class ProductServiceTest @Autowired constructor (
             assertThrows<ConstraintViolationException> {
                 service.create(vo)
             }
-
         }
     }
 }

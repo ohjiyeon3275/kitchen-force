@@ -2,8 +2,13 @@ package com.kitchenforce.domain.orders
 
 import com.kitchenforce.common.entity.AuditEntity
 import com.kitchenforce.domain.menus.Menu
-import com.kitchenforce.domain.orders.Order
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
 
 @Entity
 class OrderMenu(
@@ -13,11 +18,11 @@ class OrderMenu(
 
     @ManyToOne
     @JoinColumn(name = "orders_id")
-    var order: Order,
+    var order: Order?,
 
     @ManyToOne
     @JoinColumn(name = "menu_id")
-    var menu: Menu,
+    var menu: Menu?,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
