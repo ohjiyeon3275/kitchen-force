@@ -13,6 +13,6 @@ class MenuGroupController(
 ) {
     @GetMapping("/")
     fun index(): List<MenuGroup> {
-        return menuGroupService.findAll();
+        return menuGroupService.findAll()
     }
 }

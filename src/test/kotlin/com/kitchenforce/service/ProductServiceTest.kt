@@ -1,7 +1,7 @@
 package com.kitchenforce.service
 
 import com.kitchenforce.domain.products.entities.Product
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -13,14 +13,14 @@ import javax.validation.ConstraintViolationException
 
 @SpringBootTest
 @ActiveProfiles("test")
-internal class ProductServiceTest @Autowired constructor (
+internal class ProductServiceTest @Autowired constructor(
     private val service: ProductService
 ) {
 
     @Nested
+    @Transactional
     inner class ProductServiceCreateTest {
         @Test
-        @Transactional
         fun create_정상실행() {
             val vo = Product(
                 name = "제품1",
@@ -34,7 +34,6 @@ internal class ProductServiceTest @Autowired constructor (
         }
 
         @Test
-        @Transactional
         fun create_가격_음수() {
             val vo = Product(
                 name = "제품1",
@@ -43,7 +42,6 @@ internal class ProductServiceTest @Autowired constructor (
             assertThrows<ConstraintViolationException> {
                 service.create(vo)
             }
-
         }
     }
 }

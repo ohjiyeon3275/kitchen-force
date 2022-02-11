@@ -11,11 +11,11 @@ class MenuService(
     private val menuRepository: MenuRepository
 ) {
     fun findAll(): List<Menu> {
-        return menuRepository.findAll();
+        return menuRepository.findAll()
     }
 
     fun findById(id: Int): Menu {
         return menuRepository.findByIdOrNull(id)
-            ?: throw NotFoundException("메뉴 $id 를 찾을 수 없습니다.");
+            ?: throw NotFoundException("메뉴 $id 를 찾을 수 없습니다.")
     }
 }

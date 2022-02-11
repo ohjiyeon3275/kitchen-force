@@ -31,5 +31,4 @@ class OrderTable(
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "orderTable")
     lateinit var orderList: List<Order>
-
 }

@@ -9,6 +9,6 @@ class MenuGroupService(
     private val menuGroupRepository: MenuGroupRepository
 ) {
     fun findAll(): List<MenuGroup> {
-        return menuGroupRepository.findAll();
+        return menuGroupRepository.findAll()
     }
 }
