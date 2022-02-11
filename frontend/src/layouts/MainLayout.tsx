@@ -1,17 +1,10 @@
 import {Layout, Menu, Breadcrumb} from "antd";
-import {
-    DesktopOutlined,
-    PieChartOutlined,
-    FileOutlined,
-    TeamOutlined,
-    UserOutlined,
-} from "@ant-design/icons";
-
 import {useState} from "react";
 import 'antd/dist/antd.css';
 import {showNotification} from "../utils/utils";
-import MainRouter from "./MainRouter";
+import MainRouter, {routeList} from "./MainRouter";
 import {ProductList} from "../components/Product/ProductList";
+import {Link} from "react-router-dom";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -34,27 +27,53 @@ const MainLayout = ({title}:LayoutProps) => {
         <Layout style={{ minHeight: '100vh' }}>
             <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
                 <div className="logo" />
-                <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-                    <Menu.Item key="1" icon={<PieChartOutlined />}>
-                        상품
-                    </Menu.Item>
-                    <Menu.Item key="2" icon={<DesktopOutlined />}>
-                       메뉴
-                    </Menu.Item>
-                    <SubMenu key="sub1" icon={<UserOutlined />} title="주문">
-                        <Menu.Item key="3">테이블 주문</Menu.Item>
-                        <Menu.Item key="4">배달 주문</Menu.Item>
-                    </SubMenu>
-                    <Menu.Item key="9" icon={<UserOutlined />}>
-                        배달
-                    </Menu.Item>
+                <Menu defaultSelectedKeys={['1']} theme="dark" mode="inline">
+                    {
+                        routeList.map((route) => {
+                            let menuComponent;
+                            if (route.subRouteList.length > 1)
+                                menuComponent = (
+                                    <SubMenu key={route.key} icon={route.icon} title={route.title}>
+                                        {
+                                            route.subRouteList.map((subRoute) => (
+                                                <Menu.Item key={subRoute.key}>
+                                                    <Link to={route.path + subRoute.path}>{subRoute.title}</Link>
+                                                </Menu.Item>
+                                            ))
+                                        }
+                                    </SubMenu>
+                                );
+                            else
+                                menuComponent = (
+                                    <Menu.Item key={route.key} icon={route.icon}>
+                                        <Link to={route.path}>{route.title}</Link>
+                                    </Menu.Item>
+                                )
+                            console.log(menuComponent);
+                            return menuComponent;
+                        })
+                    }
+
+
+                    {/*<KitchenMenu.Item key="1" icon={<PieChartOutlined />}>*/}
+                    {/*    상품*/}
+                    {/*</KitchenMenu.Item>*/}
+                    {/*<KitchenMenu.Item key="2" icon={<DesktopOutlined />}>*/}
+                    {/*   메뉴*/}
+                    {/*</KitchenMenu.Item>*/}
+                    {/*<SubMenu key="sub1" icon={<UserOutlined />} title="주문">*/}
+                    {/*    <KitchenMenu.Item key="3">테이블 주문</KitchenMenu.Item>*/}
+                    {/*    <KitchenMenu.Item key="4">배달 주문</KitchenMenu.Item>*/}
+                    {/*</SubMenu>*/}
+                    {/*<KitchenMenu.Item key="9" icon={<UserOutlined />}>*/}
+                    {/*    배달*/}
+                    {/*</KitchenMenu.Item>*/}
                 </Menu>
             </Sider>
             <Layout className="site-layout">
                 <Header className="site-layout-background" style={{ paddingLeft: 10}}><h1>{title}</h1></Header>
-                {/*<MainRouter/>*/}
-                <ProductList/>
                 <Content style={{ margin: '0 16px' }}>
+                    <MainRouter/>
                     <Breadcrumb style={{ margin: '16px 0' }}>
                         <Breadcrumb.Item>User</Breadcrumb.Item>
                         <Breadcrumb.Item>Bill</Breadcrumb.Item>

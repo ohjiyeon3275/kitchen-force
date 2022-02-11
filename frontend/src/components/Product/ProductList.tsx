@@ -68,7 +68,7 @@ export const ProductList = () => {
         console.log("currentNewProductRequest : " + newProductRequest.price)
         createProduct(newProductName, newProductPrice)
             .then(()=>showNotification(
-                'info',
+                'success',
                 '등록에 성공하였습니다.',
                 '성공.'))
             .catch((error) =>
@@ -79,6 +79,8 @@ export const ProductList = () => {
             )
         setLoading(false);
         setCreateModalVisibility(false);
+
+
         // setTimeout(() => {
         //     createProduct(newProductName, newProductPrice)
         //         .then(()=>showNotification(
