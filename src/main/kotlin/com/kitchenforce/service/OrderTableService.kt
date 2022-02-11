@@ -41,6 +41,7 @@ class OrderTableService(
                 paymentMethod = orderDto.paymentMethod,
                 requirement = orderDto.requirement,
                 deliveryAddress = orderDto.deliveryAddress,
+                orderStatus = orderDto.orderStatus,
                 orderTable = orderTable
             )
             orderRepository.save(order)
@@ -128,9 +129,9 @@ class OrderTableService(
                         orderType = order.orderType,
                         paymentMethod = order.paymentMethod,
                         requirement = order.requirement,
-                        deliveryAddress = order.deliveryAddress
+                        deliveryAddress = order.deliveryAddress,
+                        orderStatus = order.orderStatus
                     )
-
                     val orderMenuList: List<OrderMenu> = order.orderMenuList
 
                     for (orderMenu in orderMenuList) {

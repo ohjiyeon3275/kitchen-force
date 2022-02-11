@@ -1,22 +1,16 @@
 package com.kitchenforce.domain.orders
 
 import com.kitchenforce.common.entity.AuditEntity
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
-import javax.persistence.Table
+import com.kitchenforce.domain.enum.OrderStatus
+import com.kitchenforce.domain.enum.OrderType
+import javax.persistence.*
 
 @Entity
 @Table(name = "orders")
 class Order(
     @Column
-    var orderType: String,
+    @Enumerated(EnumType.STRING)
+    var orderType: OrderType,
 
     @Column
     var paymentPrice: Long,
@@ -29,6 +23,10 @@ class Order(
 
     @Column
     var deliveryAddress: String,
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    var orderStatus: OrderStatus,
 
     @ManyToOne
     @JoinColumn(name = "order_table_id")
