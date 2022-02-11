@@ -20,8 +20,13 @@ class OrderTableController(
         orderTableService.create(dto)
     }
 
+    @GetMapping("")
+    fun getOrderTableList(): List<OrderTableDto> {
+        return orderTableService.get()
+    }
+
     @GetMapping("/order-info/{userId}")
-    fun orderInfo(@PathVariable userId: Long): OrderTableDto {
+    fun getOrderInfo(@PathVariable userId: Long): OrderTableDto {
         return orderTableService.orderInfo(userId)
     }
 }

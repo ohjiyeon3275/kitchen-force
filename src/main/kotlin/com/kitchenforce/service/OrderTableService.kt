@@ -60,6 +60,47 @@ class OrderTableService(
         }
     }
 
+    fun get(): List<OrderTableDto> {
+
+        val orderTableList: List<OrderTable>? = orderTableRepository.findAll()
+
+        //null로 ??
+        val orderTableDtoListNothing: MutableList<OrderTableDto> = ArrayList()
+        val orderTableDtoList: MutableList<OrderTableDto> = ArrayList()
+
+        orderTableList?.let{
+
+            for(orderTable in orderTableList){
+                val orderTableDto: OrderTableDto = OrderTableDto(
+                    userId = orderTable.userId,
+                    emptyness = orderTable.emptyness,
+                    tableName = orderTable.name,
+                    numberOfGuests = orderTable.numberOfGuests
+                )
+                orderTableDtoList.add(orderTableDto)
+            }
+            return orderTableDtoList
+        }?: return orderTableDtoListNothing
+
+        // 반복문 코틀린 람다식 적용해보기.
+        /*
+        orderTableList?.let {
+            val orderTableDtoList = orderTableList.stream().map { orderTable ->
+                {
+                    val orderTableDto: OrderTableDto = OrderTableDto(
+                        userId = orderTable.userId,
+                        emptyness = orderTable.emptyness,
+                        tableName = orderTable.name,
+                        numberOfGuests = orderTable.numberOfGuests
+                    )
+                }
+            }.toList()
+            return orderTableDtoList
+        } ?: return orderTableDtoListNothing
+
+         */
+    }
+
     fun orderInfo(userId: Long): OrderTableDto {
 
         val orderTable: OrderTable? = orderTableRepository.findByUserId(userId)
