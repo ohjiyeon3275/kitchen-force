@@ -32,3 +32,19 @@ $ docker-compose down -v
   ```
   * windows10
     * ![windows10](./image/win10-docker-run.jpg)
+
+
+## FrontEnd
+* 사전 준비사항 : 각자 OS에 맞는 npm 환경이 구성이 되어 있어야 함.
+* 기술 스택
+  * React + TypeScript
+  * ReactHooks
+  * UI : Antd
+
+* 실행 방법
+  * http://localhost:3000
+```
+cd frontend
+npm install
+npm start run
+```
