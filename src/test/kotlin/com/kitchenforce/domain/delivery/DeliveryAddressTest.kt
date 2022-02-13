@@ -1,5 +1,6 @@
 package com.kitchenforce.domain.delivery
 
+import com.kitchenforce.service.DeliveryService
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -9,7 +10,7 @@ import javax.persistence.EntityManagerFactory
 @DataJpaTest
 @ActiveProfiles("test")
 class DeliveryAddressTest @Autowired constructor (
-    val emf : EntityManagerFactory
+    val emf : EntityManagerFactory,
 ) {
 
     @BeforeEach
@@ -55,33 +56,28 @@ class DeliveryAddressTest @Autowired constructor (
     fun completeDelivery() {
 
         val em = emf.createEntityManager()
-
         val rider = em.find(Rider::class.java, 1L)
 
         Assertions.assertEquals(
-            "주문완료", em.find(DeliveryAddress::class.java, 1L).status)
+            "배달중", em.find(DeliveryAddress::class.java, 1L).status
+        )
 
-        // 0번째 status 변경
-        rider.deliveryAddress[0].status = "배달완료"
+        // 1번째 status 변경
+        rider.deliveryAddress[1].status = "배달완료"
 
         em.persist(rider)
 
-        Assertions.assertEquals(
-            "배달완료", em.find(DeliveryAddress::class.java, 1L).status)
         Assertions.assertNotEquals(
-            "배달완료" , em.find(DeliveryAddress::class.java, 2L).status)
+            "배달완료", em.find(DeliveryAddress::class.java, 1L).status
+        )
+        Assertions.assertEquals(
+            "배달완료", em.find(DeliveryAddress::class.java, 2L).status
+        )
 
     }
 
 
-    @Test
-    @DisplayName("배달 중인 주문만 배달 완료할 수 있다")
-    fun onlyOnDelivery() {
 
-//        assertDoesNotThrow { deliveryService.updateStatusToComplete(1, 1) }
-//        assertDoesNotThrow { deliveryService.updateStatusToComplete(1, 2) }
-
-    }
 
 
 }

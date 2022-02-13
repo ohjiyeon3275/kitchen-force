@@ -9,10 +9,9 @@ import org.springframework.stereotype.Service
 
 @Service
 class DeliveryService(
-    private val deliveryAddressRepository: DeliveryAddressRepository,
-    private val riderRepository: RiderRepository
+    val deliveryAddressRepository: DeliveryAddressRepository,
+    val riderRepository: RiderRepository
 ) {
-
 
     fun updateStatusToComplete (riderId: Long, deliveryAddressId: Long) : DeliveryAddress {
 
@@ -27,16 +26,16 @@ class DeliveryService(
 
         for (delivery in deliveryAddress) {
 
-            if (!delivery.status.equals("배달중")) {
+            if (delivery.status != "배달중") {
                 throw BaseExceptionTemp(BaseErrorCodeType.NOT_MATCHED_DELIVERY_STATUS)
             }
 
             if(delivery.id == deliveryAddressId){
-                delivery.status = "배달 완료"
+                delivery.status = "배달완료"
                 return deliveryAddressRepository.save(delivery)
             }
         }
 
-        return DeliveryAddress(null, "", "", "" , "")
+        return deliveryAddress[deliveryAddressId.toInt()]
     }
 }
