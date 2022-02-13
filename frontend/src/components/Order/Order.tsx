@@ -1,9 +1,24 @@
 import {PageHeader} from "antd";
+import CommonPageHeader from "../../layouts/CommonPageHeader";
+import {showNotification} from "../../utils/utils";
 
 export const Order = () => {
 
+    const onChangePrimaryButtonClick = async() => {
+        showNotification(
+            'warning',
+            '기능 준비중 입니다.',
+            '기능 준비중 '
+        );
+    }
+
     return (
         <div>
+            <CommonPageHeader
+                title={"주문 현황 관리"}
+                primaryButtonName={"조회"}
+                primaryOnClick={onChangePrimaryButtonClick}
+            />
             <PageHeader
                 className="site-page-header"
                 onBack={() => null}

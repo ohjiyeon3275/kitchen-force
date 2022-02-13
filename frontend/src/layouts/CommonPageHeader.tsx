@@ -16,9 +16,9 @@ const CommonPageHeader = ({title, subTitle, primaryButtonName, primaryOnClick}:C
                 title={title}
                 subTitle={subTitle}
                 extra={[
-                    <Button key="3">Operation</Button>,
-                    <Button key="2">Operation</Button>,
-                    <Button key="1" type="primary" onClick={primaryOnClick}>
+                    <Button key={title + "3"}>Operation</Button>,
+                    <Button key={title + "2"}>Operation</Button>,
+                    <Button key={title + "1"} type="primary" onClick={primaryOnClick}>
                         {primaryButtonName}
                     </Button>,
                 ]}

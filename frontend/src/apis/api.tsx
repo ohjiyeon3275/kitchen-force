@@ -1,6 +1,5 @@
 import axios, {AxiosError} from "axios";
 import {ProductRequest, ProductResponse} from "./interfaces";
-import {showNotification} from "../utils/utils";
 
 async function getProductListApi() : Promise<ProductResponse[]> {
     const response = await axios.get("/api/products")

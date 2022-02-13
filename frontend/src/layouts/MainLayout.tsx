@@ -33,15 +33,16 @@ const MainLayout = ({title}:LayoutProps) => {
                             let menuComponent;
                             if (route.subRouteList.length > 1)
                                 menuComponent = (
-                                    <SubMenu key={route.key} icon={route.icon} title={route.title}>
-                                        {
-                                            route.subRouteList.map((subRoute) => (
-                                                <Menu.Item key={subRoute.key}>
-                                                    <Link to={route.path + subRoute.path}>{subRoute.title}</Link>
-                                                </Menu.Item>
-                                            ))
-                                        }
-                                    </SubMenu>
+
+                                        <SubMenu key={route.key} icon={route.icon} title={route.title} >
+                                            {
+                                                route.subRouteList.map((subRoute) => (
+                                                    <Menu.Item key={subRoute.key}>
+                                                        <Link to={route.path + subRoute.path}>{subRoute.title}</Link>
+                                                    </Menu.Item>
+                                                ))
+                                            }
+                                        </SubMenu>
                                 );
                             else
                                 menuComponent = (
