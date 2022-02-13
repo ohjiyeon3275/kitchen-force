@@ -22,20 +22,20 @@ class DeliveryService(
         }
 
         val rider = riderOptional.get()
-        val deliveryAddress = rider.deliveryAddress
 
-        for (delivery in deliveryAddress) {
-
-            if (delivery.status != "배달중") {
-                throw BaseExceptionTemp(BaseErrorCodeType.NOT_MATCHED_DELIVERY_STATUS)
-            }
-
-            if(delivery.id == deliveryAddressId){
-                delivery.status = "배달완료"
-                return deliveryAddressRepository.save(delivery)
-            }
+        if(rider.deliveryAddress[deliveryAddressId.toInt()] == null){
+            throw BaseExceptionTemp(BaseErrorCodeType.NOT_FOUND_DELIVERY)
         }
 
-        return deliveryAddress[deliveryAddressId.toInt()]
+        val delivery = rider.deliveryAddress[deliveryAddressId.toInt()]
+
+        if (delivery.status != "배달중") {
+            throw BaseExceptionTemp(BaseErrorCodeType.NOT_MATCHED_DELIVERY_STATUS)
+        }else{
+            delivery.status = "배달완료"
+            return deliveryAddressRepository.save(delivery)
+        }
+
+        return delivery
     }
 }

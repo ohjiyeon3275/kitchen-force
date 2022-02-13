@@ -59,10 +59,10 @@ class DeliveryAddressTest @Autowired constructor (
         val rider = em.find(Rider::class.java, 1L)
 
         Assertions.assertEquals(
-            "배달중", em.find(DeliveryAddress::class.java, 1L).status
+            "배달중", em.find(DeliveryAddress::class.java, 2L).status
         )
 
-        // 1번째 status 변경
+        // 1번째 (pk == 2) status 변경
         rider.deliveryAddress[1].status = "배달완료"
 
         em.persist(rider)
