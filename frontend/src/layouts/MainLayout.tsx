@@ -1,9 +1,7 @@
 import {Layout, Menu, Breadcrumb} from "antd";
 import {useState} from "react";
 import 'antd/dist/antd.css';
-import {showNotification} from "../utils/utils";
 import MainRouter, {routeList} from "./MainRouter";
-import {ProductList} from "../components/Product/ProductList";
 import {Link} from "react-router-dom";
 
 const { Header, Content, Footer, Sider } = Layout;
