@@ -1,5 +1,6 @@
 package com.kitchenforce.service
 
+import com.kitchenforce.domain.delivery.DeliveryAddressRepository
 import com.kitchenforce.domain.menus.Menu
 import com.kitchenforce.domain.menus.MenuRepository
 import com.kitchenforce.domain.orders.Order
@@ -19,7 +20,8 @@ class OrderTableService(
     private val orderTableRepository: OrderTableRepository,
     private val orderRepository: OrderRepository,
     private val orderMenuRepository: OrderMenuRepository,
-    private val menuRepository: MenuRepository
+    private val menuRepository: MenuRepository,
+    private val deliveryAddressRepository: DeliveryAddressRepository
 ) {
 
     @Transactional
@@ -40,9 +42,9 @@ class OrderTableService(
                 paymentPrice = 0,
                 paymentMethod = orderDto.paymentMethod,
                 requirement = orderDto.requirement,
-                deliveryAddress = orderDto.deliveryAddress,
                 orderStatus = orderDto.orderStatus,
-                orderTable = orderTable
+                orderTable = orderTable,
+                deliveryAddress = deliveryAddressRepository.findByAddress(orderDto.deliveryAddress)!!
             )
             orderRepository.save(order)
 
@@ -65,7 +67,6 @@ class OrderTableService(
 
         val orderTableList: List<OrderTable>? = orderTableRepository.findAll()
 
-        //null로 ??
         val orderTableDtoListNothing: MutableList<OrderTableDto> = ArrayList()
         val orderTableDtoList: MutableList<OrderTableDto> = ArrayList()
 
@@ -82,24 +83,6 @@ class OrderTableService(
             }
             return orderTableDtoList
         }?: return orderTableDtoListNothing
-
-        // 반복문 코틀린 람다식 적용해보기.
-        /*
-        orderTableList?.let {
-            val orderTableDtoList = orderTableList.stream().map { orderTable ->
-                {
-                    val orderTableDto: OrderTableDto = OrderTableDto(
-                        userId = orderTable.userId,
-                        emptyness = orderTable.emptyness,
-                        tableName = orderTable.name,
-                        numberOfGuests = orderTable.numberOfGuests
-                    )
-                }
-            }.toList()
-            return orderTableDtoList
-        } ?: return orderTableDtoListNothing
-
-         */
     }
 
     fun orderInfo(userId: Long): OrderTableDto {
@@ -129,7 +112,7 @@ class OrderTableService(
                         orderType = order.orderType,
                         paymentMethod = order.paymentMethod,
                         requirement = order.requirement,
-                        deliveryAddress = order.deliveryAddress,
+                        deliveryAddress = order.deliveryAddress.address,
                         orderStatus = order.orderStatus
                     )
                     val orderMenuList: List<OrderMenu> = order.orderMenuList

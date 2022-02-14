@@ -1,6 +1,7 @@
 package com.kitchenforce.domain.orders
 
 import com.kitchenforce.common.entity.AuditEntity
+import com.kitchenforce.domain.delivery.DeliveryAddress
 import com.kitchenforce.domain.enum.OrderStatus
 import com.kitchenforce.domain.enum.OrderType
 import javax.persistence.*
@@ -22,15 +23,16 @@ class Order(
     var requirement: String,
 
     @Column
-    var deliveryAddress: String,
-
-    @Column
     @Enumerated(EnumType.STRING)
     var orderStatus: OrderStatus,
 
     @ManyToOne
     @JoinColumn(name = "order_table_id")
     var orderTable: OrderTable,
+
+    @ManyToOne
+    @JoinColumn(name = "delivery_address_id")
+    var deliveryAddress: DeliveryAddress,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
