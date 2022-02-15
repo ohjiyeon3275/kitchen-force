@@ -5,5 +5,5 @@ data class OrderTableDto(
     val emptyness: Boolean,
     val tableName: String,
     val numberOfGuests: Int,
-    val orderDtoList: MutableList<OrderDto> = ArrayList()
+    val orderDtoList: MutableList<OrderDto>
 )

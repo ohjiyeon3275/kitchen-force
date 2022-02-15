@@ -1,5 +1,6 @@
 package com.kitchenforce.service
 
+import com.kitchenforce.domain.delivery.DeliveryAddress
 import com.kitchenforce.domain.delivery.DeliveryAddressRepository
 import com.kitchenforce.domain.menus.Menu
 import com.kitchenforce.domain.menus.MenuRepository
@@ -32,7 +33,6 @@ class OrderTableService(
             emptyness = dto.emptyness,
             numberOfGuests = dto.numberOfGuests
         )
-
         val savedOrder = orderTableRepository.save(orderTable)
 
         for (orderDto in dto.orderDtoList) {
@@ -44,14 +44,14 @@ class OrderTableService(
                 requirement = orderDto.requirement,
                 orderStatus = orderDto.orderStatus,
                 orderTable = orderTable,
-                deliveryAddress = deliveryAddressRepository.findByAddress(orderDto.deliveryAddress)!!
+                deliveryAddress = deliveryAddressRepository.findByAddress(orderDto.deliveryAddress)
             )
             orderRepository.save(order)
 
             val orderMenus: MutableList<OrderMenu> = ArrayList()
             for (orderMenuDto in orderDto.orderMenuDtoList) {
 
-                val menu: Menu = menuRepository.findByName(orderMenuDto.menuName)
+                val menu: Menu? = menuRepository.findByName(orderMenuDto.menuName)
                 val orderMenu: OrderMenu = OrderMenu(
                     quantity = orderMenuDto.quantity,
                     order = order,
@@ -77,7 +77,8 @@ class OrderTableService(
                     userId = orderTable.userId,
                     emptyness = orderTable.emptyness,
                     tableName = orderTable.name,
-                    numberOfGuests = orderTable.numberOfGuests
+                    numberOfGuests = orderTable.numberOfGuests,
+                    orderDtoList = ArrayList()
                 )
                 orderTableDtoList.add(orderTableDto)
             }
@@ -93,7 +94,8 @@ class OrderTableService(
             userId = -1,
             emptyness = true,
             tableName = "-1",
-            numberOfGuests = -1
+            numberOfGuests = -1,
+            orderDtoList = ArrayList()
         )
 
         orderTable?.let {
@@ -101,7 +103,8 @@ class OrderTableService(
                 userId = orderTable.userId,
                 emptyness = orderTable.emptyness,
                 tableName = orderTable.name,
-                numberOfGuests = orderTable.numberOfGuests
+                numberOfGuests = orderTable.numberOfGuests,
+                orderDtoList = ArrayList()
             )
             val orderList: List<Order>? = orderTable.orderList
 
@@ -112,8 +115,9 @@ class OrderTableService(
                         orderType = order.orderType,
                         paymentMethod = order.paymentMethod,
                         requirement = order.requirement,
-                        deliveryAddress = order.deliveryAddress.address,
-                        orderStatus = order.orderStatus
+                        deliveryAddress = order.deliveryAddress?.address ?: "주소 없음.",
+                        orderStatus = order.orderStatus,
+                        orderMenuDtoList = ArrayList()
                     )
                     val orderMenuList: List<OrderMenu> = order.orderMenuList
 

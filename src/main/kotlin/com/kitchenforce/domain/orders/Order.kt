@@ -32,7 +32,7 @@ class Order(
 
     @ManyToOne
     @JoinColumn(name = "delivery_address_id")
-    var deliveryAddress: DeliveryAddress,
+    var deliveryAddress: DeliveryAddress?,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

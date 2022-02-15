@@ -1,6 +1,6 @@
 package com.kitchenforce.domain.orders.dto
 
 data class OrderMenuDto(
-    var quantity: Long,
-    var menuName: String
+    val quantity: Long,
+    val menuName: String
 )
