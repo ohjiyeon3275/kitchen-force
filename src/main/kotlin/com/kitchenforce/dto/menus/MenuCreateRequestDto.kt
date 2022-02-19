@@ -1,7 +1,10 @@
 package com.kitchenforce.dto.menus
 
+import com.sun.istack.NotNull
+
 data class MenuCreateRequestDto(
     val name: String,
-    val products: List<Int>,
+    @NotNull
+    val products: List<Long>,
     val price: Int
 )

@@ -18,8 +18,8 @@ class MenuProduct(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int?,
 
-    @Column(nullable = false)
-    val quantity: Int,
+//    @Column(nullable = false)
+    val quantity: Int?,
 
     @ManyToOne
     @JoinColumn(name = "menu_id")
