@@ -1,10 +1,8 @@
 package com.kitchenforce.service
 
 import com.kitchenforce.common.exception.NotFoundException
-import com.kitchenforce.domain.menus.Menu
-import com.kitchenforce.domain.menus.MenuGroup
-import com.kitchenforce.domain.menus.MenuGroupRepository
-import com.kitchenforce.domain.menus.MenuRepository
+import com.kitchenforce.domain.menus.*
+import com.kitchenforce.domain.products.entities.ProductRepository
 import com.kitchenforce.dto.menus.MenuCreateRequestDto
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -12,12 +10,22 @@ import org.springframework.stereotype.Service
 @Service
 class MenuService(
     private val menuRepository: MenuRepository,
-    private val menuGroupRepository: MenuGroupRepository
+    private val menuGroupRepository: MenuGroupRepository,
+    private val productRepository: ProductRepository,
+    private val menuProductRepository: MenuProductRepository
 ) {
 
     fun createMenu(req: MenuCreateRequestDto, menuGroup: Int){
-        val group: MenuGroup = menuGroupRepository.findById(menuGroup).orElseThrow();
-        menuRepository.save(Menu(null, req.name, req.price, menuGroup = group));
+        val group: MenuGroup = menuGroupRepository.findById(menuGroup).orElseThrow()
+        val menu: Menu = menuRepository.save(Menu(null, req.name, req.price, menuGroup = group))
+//        val arr : MutableList<Product>?=null
+        for (i in req.products){
+//            arr?.add(productRepository.findById(i).orElseThrow()
+            menuProductRepository.save(
+                MenuProduct(null, null,
+                    menu,
+                    productRepository.findById(i).orElseThrow()))
+        }
     }
 
     fun findAll(): List<Menu> {
