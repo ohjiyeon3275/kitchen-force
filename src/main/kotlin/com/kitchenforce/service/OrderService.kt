@@ -10,17 +10,14 @@ import com.kitchenforce.domain.orders.dto.OrderMenuDto
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-
 @Service
-class OrderService (
+class OrderService(
     private val orderRepository: OrderRepository,
     private val orderTableRepository: OrderTableRepository,
     private val orderMenuRepository: OrderMenuRepository,
     private val menuRepository: MenuRepository,
     private val deliveryAddressRepository: DeliveryAddressRepository
-        ){
-
-
+) {
     @Transactional
     fun create(dto: OrderDto) {
 
@@ -35,8 +32,7 @@ class OrderService (
         )
         orderRepository.save(order)
 
-        //비교안되면 OrderType.EATIN으로,
-        if(dto.orderType == OrderType.EATIN) {
+        if (dto.orderType == OrderType.EATIN) {
             val orderTable: OrderTable = OrderTable(
                 name = dto.orderTableDto?.tableName ?: "테이블 지정 안됨.",
                 emptyness = dto.orderTableDto?.emptyness ?: false,
@@ -47,7 +43,7 @@ class OrderService (
         }
 
         val orderMenuList: MutableList<OrderMenu> = ArrayList()
-        for (orderMenuDto in dto.orderMenuDtoList){
+        for (orderMenuDto in dto.orderMenuDtoList) {
             val orderMenu: OrderMenu = OrderMenu(
                 quantity = orderMenuDto.quantity,
                 order = order,
@@ -64,7 +60,7 @@ class OrderService (
 
         val orderDtoList: MutableList<OrderDto> = ArrayList()
 
-        for(order in orderList){
+        for (order in orderList) {
 
             val orderDto: OrderDto = OrderDto(
                 userId = order.userId,
@@ -72,7 +68,7 @@ class OrderService (
                 orderStatus = order.orderStatus,
                 paymentMethod = order.paymentMethod,
                 requirement = order.requirement,
-                deliveryAddress = order.deliveryAddress?.address ?:"등록된 주소 없음.",
+                deliveryAddress = order.deliveryAddress?.address ?: "등록된 주소 없음.",
                 orderTableDto = null,
                 orderMenuDtoList = ArrayList()
             )
@@ -123,10 +119,6 @@ class OrderService (
                     )
                 }
             )
-        }?: return orderDtoNothing
-
+        } ?: return orderDtoNothing
     }
-
-
-
 }

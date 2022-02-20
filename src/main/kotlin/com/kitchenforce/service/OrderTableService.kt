@@ -25,9 +25,9 @@ class OrderTableService(
         val orderTableDtoListNothing: MutableList<OrderTableDto> = ArrayList()
         val orderTableDtoList: MutableList<OrderTableDto> = ArrayList()
 
-        orderTableList?.let{
+        orderTableList?.let {
 
-            for(orderTable in orderTableList){
+            for (orderTable in orderTableList) {
                 val orderTableDto: OrderTableDto = OrderTableDto(
                     emptyness = orderTable.emptyness,
                     tableName = orderTable.name,
@@ -36,6 +36,6 @@ class OrderTableService(
                 orderTableDtoList.add(orderTableDto)
             }
             return orderTableDtoList
-        }?: return orderTableDtoListNothing
+        } ?: return orderTableDtoListNothing
     }
 }
