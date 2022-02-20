@@ -15,18 +15,8 @@ class OrderTableController(
     private val orderTableService: OrderTableService
 ) {
 
-    @PostMapping("")
-    fun createOrderTable(@RequestBody dto: OrderTableDto) {
-        orderTableService.create(dto)
-    }
-
     @GetMapping("")
     fun getOrderTableList(): List<OrderTableDto> {
         return orderTableService.get()
-    }
-
-    @GetMapping("/order-info/{userId}")
-    fun getOrderInfo(@PathVariable userId: Long): OrderTableDto {
-        return orderTableService.orderInfo(userId)
     }
 }

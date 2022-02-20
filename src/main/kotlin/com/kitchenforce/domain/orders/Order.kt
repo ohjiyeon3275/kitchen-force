@@ -9,9 +9,17 @@ import javax.persistence.*
 @Entity
 @Table(name = "orders")
 class Order(
+
+    @Column
+    var userId: Long,
+
     @Column
     @Enumerated(EnumType.STRING)
     var orderType: OrderType,
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    var orderStatus: OrderStatus,
 
     @Column
     var paymentPrice: Long,
@@ -21,14 +29,6 @@ class Order(
 
     @Column
     var requirement: String,
-
-    @Column
-    @Enumerated(EnumType.STRING)
-    var orderStatus: OrderStatus,
-
-    @ManyToOne
-    @JoinColumn(name = "order_table_id")
-    var orderTable: OrderTable,
 
     @ManyToOne
     @JoinColumn(name = "delivery_address_id")
