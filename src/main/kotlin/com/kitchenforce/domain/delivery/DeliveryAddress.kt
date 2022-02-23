@@ -14,18 +14,18 @@ class DeliveryAddress(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int,
-
-    @Column(name = "address", nullable = false)
-    val address: String,
+    var id: Long? = null,
 
     @Column(nullable = false)
-    val customerPhoneNumber: String,
+    var address: String,
 
     @Column(nullable = false)
-    val status: String,
+    var customerPhoneNumber: String,
+
+    @Column(nullable = false)
+    var status: String,
 
     @Column
-    val note: String,
+    var note: String,
 
 ) : AuditEntity()
