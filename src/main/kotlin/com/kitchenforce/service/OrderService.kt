@@ -1,7 +1,7 @@
 package com.kitchenforce.service
 
+import com.kitchenforce.common.exception.NotFoundException
 import com.kitchenforce.domain.delivery.DeliveryAddressRepository
-import com.kitchenforce.domain.enum.OrderStatus
 import com.kitchenforce.domain.enum.OrderType
 import com.kitchenforce.domain.menus.MenuRepository
 import com.kitchenforce.domain.orders.*
@@ -42,68 +42,38 @@ class OrderService(
             orderTableRepository.save(orderTable)
         }
 
-        val orderMenuList: MutableList<OrderMenu> = ArrayList()
-        for (orderMenuDto in dto.orderMenuDtoList) {
-            val orderMenu: OrderMenu = OrderMenu(
-                quantity = orderMenuDto.quantity,
+        dto.orderMenuDtoList.map {
+            OrderMenu(
+                quantity = it.quantity,
                 order = order,
-                menu = menuRepository.findByName(orderMenuDto.menuName)
+                menu = menuRepository.findByName(it.menuName)
             )
-            orderMenuList.add(orderMenu)
-        }
-        orderMenuRepository.saveAll(orderMenuList)
+        }.also { orderMenuRepository.saveAll(it) }
     }
 
     fun get(): List<OrderDto> {
 
         val orderList: List<Order> = orderRepository.findAll()
 
-        val orderDtoList: MutableList<OrderDto> = ArrayList()
-
-        for (order in orderList) {
-
-            val orderDto: OrderDto = OrderDto(
-                userId = order.userId,
-                orderType = order.orderType,
-                orderStatus = order.orderStatus,
-                paymentMethod = order.paymentMethod,
-                requirement = order.requirement,
-                deliveryAddress = order.deliveryAddress?.address ?: "등록된 주소 없음.",
+        orderList.map {
+            OrderDto(
+                userId = it.userId,
+                orderType = it.orderType,
+                orderStatus = it.orderStatus,
+                paymentMethod = it.paymentMethod,
+                requirement = it.requirement,
+                deliveryAddress = it.deliveryAddress?.address ?: "등록된 주소 없음.",
                 orderTableDto = null,
                 orderMenuDtoList = ArrayList()
             )
-            orderDtoList.add(orderDto)
-        }
-        return orderDtoList
+        }.also { return it }
     }
 
     fun getOrder(userId: Long): OrderDto {
 
-        val orderDtoNothing: OrderDto = OrderDto(
-            userId = userId,
-            orderType = OrderType.ERROR,
-            orderStatus = OrderStatus.ERROR,
-            paymentMethod = "",
-            requirement = "",
-            deliveryAddress = "",
-            orderTableDto = null,
-            orderMenuDtoList = ArrayList()
-        )
-
         val order: Order? = orderRepository.findByUserId(userId)
 
         order?.let {
-
-            val orderMenuDtoList: MutableList<OrderMenuDto> = ArrayList()
-            for (orderMenu in order.orderMenuList) {
-
-                val orderMenuDto: OrderMenuDto = OrderMenuDto(
-                    quantity = orderMenu.quantity,
-                    menuName = orderMenu.menu?.name ?: "메뉴 네임 미정"
-                )
-                orderMenuDtoList.add(orderMenuDto)
-            }
-
             return OrderDto(
                 userId = userId,
                 orderType = order.orderType,
@@ -119,6 +89,6 @@ class OrderService(
                     )
                 }
             )
-        } ?: return orderDtoNothing
+        } ?: throw NotFoundException("접수된 주문이 존재하지 않습니다.")
     }
 }

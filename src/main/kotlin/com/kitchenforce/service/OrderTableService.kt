@@ -20,22 +20,14 @@ class OrderTableService(
 
     fun get(): List<OrderTableDto> {
 
-        val orderTableList: List<OrderTable>? = orderTableRepository.findAll()
+        val orderTableList: List<OrderTable> = orderTableRepository.findAll()
 
-        val orderTableDtoListNothing: MutableList<OrderTableDto> = ArrayList()
-        val orderTableDtoList: MutableList<OrderTableDto> = ArrayList()
-
-        orderTableList?.let {
-
-            for (orderTable in orderTableList) {
-                val orderTableDto: OrderTableDto = OrderTableDto(
-                    emptyness = orderTable.emptyness,
-                    tableName = orderTable.name,
-                    numberOfGuests = orderTable.numberOfGuests
-                )
-                orderTableDtoList.add(orderTableDto)
-            }
-            return orderTableDtoList
-        } ?: return orderTableDtoListNothing
+        orderTableList.map {
+            OrderTableDto(
+                emptyness = it.emptyness,
+                tableName = it.name,
+                numberOfGuests = it.numberOfGuests
+            )
+        }.also { return it }
     }
 }
