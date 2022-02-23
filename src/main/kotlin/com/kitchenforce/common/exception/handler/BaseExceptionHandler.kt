@@ -4,6 +4,7 @@ import com.kitchenforce.common.exception.BaseErrorCodeType
 import com.kitchenforce.common.exception.BaseErrorResponse
 import com.kitchenforce.common.exception.BaseException
 import com.kitchenforce.domain.products.exception.ProductException
+import mu.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import java.util.stream.Collectors
 import javax.servlet.http.HttpServletRequest
+
+private val logger = KotlinLogging.logger {}
 
 @ControllerAdvice
 class BaseExceptionHandler {
@@ -24,6 +27,7 @@ class BaseExceptionHandler {
         e: BaseException,
         request: HttpServletRequest?
     ): ResponseEntity<BaseErrorResponse?> {
+        logger.error("error", e)
         return ResponseEntity(BaseErrorResponse.createErrorResponse(e), e.errorStatus)
     }
 
@@ -51,6 +55,8 @@ class BaseExceptionHandler {
             description = null,
             errorCode = HttpStatus.BAD_REQUEST.value(),
         )
+
+        logger.error("error", e)
         return ResponseEntity(
             BaseErrorResponse.createErrorResponse(boxedException),
             boxedException.errorStatus
@@ -70,6 +76,8 @@ class BaseExceptionHandler {
             description = null,
             errorCode = BaseErrorCodeType.UNKNOWN_ERROR.errorStatus.value()
         )
+
+        logger.error("error", e)
 
         return ResponseEntity(
             BaseErrorResponse.createErrorResponse(boxedException),
