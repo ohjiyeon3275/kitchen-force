@@ -6,6 +6,7 @@ import com.kitchenforce.domain.products.entities.ProductRepository
 import com.kitchenforce.dto.menus.MenuCreateRequestDto
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import java.lang.IllegalStateException
 import javax.transaction.Transactional
 
 @Service
@@ -18,14 +19,14 @@ class MenuService(
 
     @Transactional
     fun createMenu(req: MenuCreateRequestDto, menuGroup: Int){
-        val group: MenuGroup = menuGroupRepository.findById(menuGroup).orElseThrow()
+        val group: MenuGroup = menuGroupRepository.findByIdOrNull(menuGroup)?: throw IllegalStateException("MENU GROUP NOT FOUND")
         val menu: Menu = menuRepository.save(Menu(null, req.name, req.price, menuGroup = group))
         for (product in req.products){
             menuProductRepository.save(
                 MenuProduct(null,
                     product.value,
                     menu,
-                    productRepository.findById(product.key).orElseThrow()))
+                    productRepository.findByIdOrNull(product.key)?: throw IllegalStateException("PRODUCT NOT FOUND")))
         }
     }
 
