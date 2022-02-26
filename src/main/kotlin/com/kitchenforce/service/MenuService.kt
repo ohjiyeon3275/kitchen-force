@@ -6,6 +6,7 @@ import com.kitchenforce.domain.products.entities.ProductRepository
 import com.kitchenforce.dto.menus.MenuCreateRequestDto
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import javax.transaction.Transactional
 
 @Service
 class MenuService(
@@ -15,16 +16,16 @@ class MenuService(
     private val menuProductRepository: MenuProductRepository
 ) {
 
+    @Transactional
     fun createMenu(req: MenuCreateRequestDto, menuGroup: Int){
         val group: MenuGroup = menuGroupRepository.findById(menuGroup).orElseThrow()
         val menu: Menu = menuRepository.save(Menu(null, req.name, req.price, menuGroup = group))
-//        val arr : MutableList<Product>?=null
-        for (i in req.products){
-//            arr?.add(productRepository.findById(i).orElseThrow()
+        for (product in req.products){
             menuProductRepository.save(
-                MenuProduct(null, null,
+                MenuProduct(null,
+                    product.value,
                     menu,
-                    productRepository.findById(i).orElseThrow()))
+                    productRepository.findById(product.key).orElseThrow()))
         }
     }
 

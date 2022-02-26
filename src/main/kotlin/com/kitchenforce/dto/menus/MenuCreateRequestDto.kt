@@ -5,6 +5,6 @@ import com.sun.istack.NotNull
 data class MenuCreateRequestDto(
     val name: String,
     @NotNull
-    val products: List<Long>,
+    val products: Map<Long, Int>,
     val price: Int
 )

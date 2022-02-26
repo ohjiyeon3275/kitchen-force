@@ -18,7 +18,7 @@ class MenuProduct(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int?,
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     val quantity: Int?,
 
     @ManyToOne
@@ -27,5 +27,5 @@ class MenuProduct(
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    var product: Product? = null,
+    var product: Product,
 ) : AuditEntity()
