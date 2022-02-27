@@ -1,11 +1,9 @@
 package com.kitchenforce.domain.enum
 
 enum class OrderType(
-    val id: Int,
-    val title: String,
-    val description: String
+    val title: String
 ) {
-    DELIVERY(0, "배달", "배달 주문"),
-    TAKEOUT(1, "포장", "포장 주문"),
-    EATIN(2, "매장", "매장 취식 주문"),
+    DELIVERY("배달"),
+    TAKEOUT("포장"),
+    EATIN("매장"),
 }
