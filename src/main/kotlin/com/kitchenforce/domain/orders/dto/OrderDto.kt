@@ -1,9 +1,14 @@
 package com.kitchenforce.domain.orders.dto
 
+import com.kitchenforce.domain.enum.OrderStatus
+import com.kitchenforce.domain.enum.OrderType
+
 data class OrderDto(
-    var orderType: String = "",
-    var paymentMethod: String = "",
-    var requirement: String = "",
-    var deliveryAddress: String = "",
-    var orderMenuDtoList: MutableList<OrderMenuDto> = ArrayList()
+    val orderType: OrderType,
+    val orderStatus: OrderStatus,
+    val paymentMethod: String,
+    val requirement: String,
+    val deliveryAddress: String,
+    val orderTableDto: OrderTableDto?,
+    val orderMenuDtoList: List<OrderMenuDto>
 )
