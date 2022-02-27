@@ -4,7 +4,6 @@ import com.kitchenforce.domain.enum.OrderStatus
 import com.kitchenforce.domain.enum.OrderType
 
 data class OrderDto(
-    val userId: Long,
     val orderType: OrderType,
     val orderStatus: OrderStatus,
     val paymentMethod: String,

@@ -1,12 +1,10 @@
 package com.kitchenforce.service
 
-import com.kitchenforce.common.exception.NotFoundException
 import com.kitchenforce.domain.delivery.DeliveryAddressRepository
 import com.kitchenforce.domain.enum.OrderType
 import com.kitchenforce.domain.menus.MenuRepository
 import com.kitchenforce.domain.orders.*
 import com.kitchenforce.domain.orders.dto.OrderDto
-import com.kitchenforce.domain.orders.dto.OrderMenuDto
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -22,7 +20,6 @@ class OrderService(
     fun create(dto: OrderDto) {
 
         val order: Order = Order(
-            userId = dto.userId,
             orderStatus = dto.orderStatus,
             orderType = dto.orderType,
             paymentMethod = dto.paymentMethod,
@@ -57,7 +54,6 @@ class OrderService(
 
         orderList.map {
             OrderDto(
-                userId = it.userId,
                 orderType = it.orderType,
                 orderStatus = it.orderStatus,
                 paymentMethod = it.paymentMethod,
@@ -67,28 +63,5 @@ class OrderService(
                 orderMenuDtoList = ArrayList()
             )
         }.also { return it }
-    }
-
-    fun getOrder(userId: Long): OrderDto {
-
-        val order: Order? = orderRepository.findByUserId(userId)
-
-        order?.let {
-            return OrderDto(
-                userId = userId,
-                orderType = order.orderType,
-                orderStatus = order.orderStatus,
-                paymentMethod = order.paymentMethod,
-                requirement = order.requirement,
-                deliveryAddress = order.deliveryAddress?.address ?: "주소 없음.",
-                orderTableDto = null,
-                orderMenuDtoList = order.orderMenuList.map {
-                    OrderMenuDto(
-                        quantity = it.quantity,
-                        menuName = it.menu?.name ?: "메뉴 네임 미정"
-                    )
-                }
-            )
-        } ?: throw NotFoundException("접수된 주문이 존재하지 않습니다.")
     }
 }

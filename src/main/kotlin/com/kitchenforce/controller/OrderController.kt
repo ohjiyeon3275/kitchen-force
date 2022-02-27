@@ -19,9 +19,4 @@ class OrderController(
     fun getOrderList(): List<OrderDto> {
         return orderService.get()
     }
-
-    @GetMapping("/{userId}")
-    fun getOrder(@PathVariable userId: Long): OrderDto {
-        return orderService.getOrder(userId)
-    }
 }

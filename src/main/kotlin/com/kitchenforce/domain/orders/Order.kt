@@ -11,9 +11,6 @@ import javax.persistence.*
 class Order(
 
     @Column
-    var userId: Long,
-
-    @Column
     @Enumerated(EnumType.STRING)
     var orderType: OrderType,
 
