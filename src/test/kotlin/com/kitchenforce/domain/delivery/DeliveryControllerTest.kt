@@ -1,36 +1,57 @@
 package com.kitchenforce.domain.delivery
 
-import com.kitchenforce.controller.DeliveryController
-import org.junit.jupiter.api.BeforeEach
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import org.springframework.test.web.servlet.put
 
+@SpringBootTest
 @AutoConfigureMockMvc
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-class DeliveryControllerTest {
-
-    @Autowired
-    lateinit var deliveryController: DeliveryController
-
-    @Autowired
-    lateinit var mvc: MockMvc
-
-    @BeforeEach
-    fun setUp() {
-        mvc = MockMvcBuilders.standaloneSetup(deliveryController).build()
-    }
+internal class DeliveryControllerTest @Autowired constructor(
+    val mockMvc: MockMvc,
+    val objectMapper: ObjectMapper,
+    val deliveryAddressRepository: DeliveryAddressRepository,
+    val riderRepository: RiderRepository
+){
 
     @Test
-    fun controllerTest() {
+    @DisplayName("배달완료한 주문의 상태를 바꾼다.")
+    fun `배달완료한 주문의 상태를 바꾼다` () {
 
-        mvc.perform(MockMvcRequestBuilders.get("/api/delivery/get"))
-            .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().string("hello get mapping :D"))
+        //given
+        val newDelivery =
+            DeliveryAddress(1L,
+                "주소시 주소동",
+                "010123123",
+                "주문완료",
+                "조심히")
+
+        val newRider =
+            Rider(1L, "rider", "1231231234", listOf(newDelivery))
+
+        deliveryAddressRepository.save(newDelivery)
+        riderRepository.save(newRider)
+
+        val riderId = 1L
+        val deliveryId = 1L
+
+        //when 1) happy result
+        val performPut = mockMvc.put("/api/delivery/$riderId/$deliveryId"){
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(newRider)
+        }
+
+        //then
+        performPut
+            .andDo{ print() }
+            .andExpect {
+                status { isOk() }
+                jsonPath("$.status") { value("배달완료") }
+            }
     }
 }
