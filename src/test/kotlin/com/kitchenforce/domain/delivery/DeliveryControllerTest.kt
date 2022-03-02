@@ -40,11 +40,10 @@ internal class DeliveryControllerTest @Autowired constructor(
         deliveryAddressRepository.save(newDelivery)
         riderRepository.save(newRider)
 
-        val riderId = 1L
         val deliveryId = 1L
 
         //when
-        val performPut = mockMvc.put("/api/delivery/$riderId/$deliveryId")
+        val performPut = mockMvc.put("/api/delivery/$deliveryId")
 
         //then
         performPut
@@ -74,11 +73,10 @@ internal class DeliveryControllerTest @Autowired constructor(
         deliveryAddressRepository.save(newDelivery)
         riderRepository.save(newRider)
 
-        val riderId = 1L
         val deliveryId = 2L // 이부분 오류뜨게 수정
 
         //when
-        val performPut = mockMvc.put("/api/delivery/$riderId/$deliveryId")
+        val performPut = mockMvc.put("/api/delivery/$deliveryId")
 
         //then
         performPut
