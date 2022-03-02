@@ -24,6 +24,7 @@ class OrderTableService(
 
     @Transactional
     fun create(dto: OrderTableDto) {
+
         val orderTable: OrderTable = OrderTable(
             userId = dto.userId,
             name = dto.tableName,
@@ -34,13 +35,14 @@ class OrderTableService(
         val savedOrder = orderTableRepository.save(orderTable)
 
         for (orderDto in dto.orderDtoList) {
+            val deliveryAddressId = orderDto.deliveryAddress?.id
 
             val order: Order = Order(
                 orderType = orderDto.orderType,
                 paymentPrice = 0,
                 paymentMethod = orderDto.paymentMethod,
                 requirement = orderDto.requirement,
-                deliveryAddress = orderDto.deliveryAddress,
+                deliveryAddress = deliveryAddressId?.let { orderRepository.findByDeliveryAddressExists(it) },
                 orderTable = orderTable
             )
             orderRepository.save(order)

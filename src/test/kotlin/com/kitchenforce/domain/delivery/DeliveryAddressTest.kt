@@ -1,6 +1,5 @@
 package com.kitchenforce.domain.delivery
 
-import com.kitchenforce.service.DeliveryService
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -21,15 +20,17 @@ class DeliveryAddressTest @Autowired constructor (
 
         val deliveryAddressFirst = DeliveryAddress(
             address = "테스트시 주소동 123, 123호",
-            customerPhoneNumber = "010-1234-1234",
-            status = "주문완료",
+            phoneNumber = "010-1234-1234",
+            accountStatus = "",
+            deliveryStatus = "주문완료",
             note = "리뷰이벤트"
         )
 
         val deliveryAddressSecond = DeliveryAddress(
             address = "테스트시 주소동 345, 345호",
-            customerPhoneNumber = "010-5678-5678",
-            status = "배달중",
+            phoneNumber = "010-5678-5678",
+            accountStatus = "",
+            deliveryStatus = "배달중",
             note = "맛있게"
         )
 
@@ -59,25 +60,21 @@ class DeliveryAddressTest @Autowired constructor (
         val rider = em.find(Rider::class.java, 1L)
 
         Assertions.assertEquals(
-            "배달중", em.find(DeliveryAddress::class.java, 2L).status
+            "배달중", em.find(DeliveryAddress::class.java, 2L).deliveryStatus
         )
 
         // 1번째 (pk == 2) status 변경
-        rider.deliveryAddress[1].status = "배달완료"
+        rider.deliveryAddress[1].deliveryStatus = "배달완료"
 
         em.persist(rider)
 
         Assertions.assertNotEquals(
-            "배달완료", em.find(DeliveryAddress::class.java, 1L).status
+            "배달완료", em.find(DeliveryAddress::class.java, 1L).deliveryStatus
         )
         Assertions.assertEquals(
-            "배달완료", em.find(DeliveryAddress::class.java, 2L).status
+            "배달완료", em.find(DeliveryAddress::class.java, 2L).deliveryStatus
         )
 
     }
-
-
-
-
 
 }

@@ -1,9 +1,9 @@
 package com.kitchenforce.domain.delivery
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.kitchenforce.domain.delivery.exception.DeliveryErrorCodeType
 import com.kitchenforce.domain.delivery.exception.DeliveryException
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.put
 @AutoConfigureMockMvc
 internal class DeliveryControllerTest @Autowired constructor(
     val mockMvc: MockMvc,
-    val objectMapper: ObjectMapper,
     val deliveryAddressRepository: DeliveryAddressRepository,
     val riderRepository: RiderRepository
 ){
@@ -30,8 +29,10 @@ internal class DeliveryControllerTest @Autowired constructor(
             DeliveryAddress(1L,
                 "주소시 주소동",
                 "010123123",
+                "active",
                 "주문완료",
-                "조심히")
+                "조심히"
+            )
 
         val newRider =
             Rider(1L, "rider", "1231231234", listOf(newDelivery))
@@ -43,17 +44,14 @@ internal class DeliveryControllerTest @Autowired constructor(
         val deliveryId = 1L
 
         //when
-        val performPut = mockMvc.put("/api/delivery/$riderId/$deliveryId"){
-            contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(newRider)
-        }
+        val performPut = mockMvc.put("/api/delivery/$riderId/$deliveryId")
 
         //then
         performPut
             .andDo{ print() }
             .andExpect {
                 status { isOk() }
-                jsonPath("$.status") { value("배달완료") }
+                jsonPath("$.deliveryStatus") { value("배달완료") }
             }
     }
 
@@ -66,8 +64,9 @@ internal class DeliveryControllerTest @Autowired constructor(
             DeliveryAddress(1L,
                 "주소시 주소동",
                 "010123123",
+                "dormant",
                 "주문완료",
-                "조심히")
+                        "조심히")
 
         val newRider =
             Rider(1L, "rider", "1231231234", listOf(newDelivery))
@@ -79,10 +78,7 @@ internal class DeliveryControllerTest @Autowired constructor(
         val deliveryId = 2L // 이부분 오류뜨게 수정
 
         //when
-        val performPut = mockMvc.put("/api/delivery/$riderId/$deliveryId"){
-            contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(newRider)
-        }
+        val performPut = mockMvc.put("/api/delivery/$riderId/$deliveryId")
 
         //then
         performPut

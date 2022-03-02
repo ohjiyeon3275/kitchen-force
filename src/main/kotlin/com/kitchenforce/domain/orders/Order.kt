@@ -1,16 +1,8 @@
 package com.kitchenforce.domain.orders
 
 import com.kitchenforce.common.entity.AuditEntity
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
-import javax.persistence.Table
+import com.kitchenforce.domain.delivery.DeliveryAddress
+import javax.persistence.*
 
 @Entity
 @Table(name = "orders")
@@ -27,8 +19,8 @@ class Order(
     @Column
     var requirement: String,
 
-    @Column
-    var deliveryAddress: String,
+    @OneToOne
+    var deliveryAddress: DeliveryAddress?,
 
     @ManyToOne
     @JoinColumn(name = "order_table_id")

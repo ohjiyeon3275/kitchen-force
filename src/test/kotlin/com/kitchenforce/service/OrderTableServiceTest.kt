@@ -1,5 +1,7 @@
 package com.kitchenforce.service
 
+import com.kitchenforce.domain.delivery.DeliveryAddress
+import com.kitchenforce.domain.delivery.DeliveryAddressRepository
 import com.kitchenforce.domain.menus.Menu
 import com.kitchenforce.domain.menus.MenuGroup
 import com.kitchenforce.domain.menus.MenuGroupRepository
@@ -38,7 +40,8 @@ class OrderTableServiceTest @Autowired constructor(
     private val orderRepository: OrderRepository,
     private val orderMenuRepository: OrderMenuRepository,
     private val menuRepository: MenuRepository,
-    private val menuGroupRepository: MenuGroupRepository
+    private val menuGroupRepository: MenuGroupRepository,
+    private val deliveryAddressRepository: DeliveryAddressRepository
 ) {
 
     val testMenuGroup = MenuGroup(
@@ -54,8 +57,16 @@ class OrderTableServiceTest @Autowired constructor(
         menuGroup = testMenuGroup
     )
 
+    val testDeliveryAddress = DeliveryAddress(1L,
+        "사랑시 고백구 행복동",
+        "123",
+        "active",
+        "orderDone",
+        "조심히")
+
     @BeforeEach
     fun setUpMenus() {
+        deliveryAddressRepository.save(testDeliveryAddress)
         menuGroupRepository.save(testMenuGroup)
         menuRepository.save(testMenu)
     }
@@ -69,13 +80,15 @@ class OrderTableServiceTest @Autowired constructor(
             quantity = 1L,
             menuName = "메뉴1"
         )
+
         val testOrderDto = OrderDto(
             orderType = "배달",
             paymentMethod = "카드결제",
             requirement = "?",
-            deliveryAddress = "사랑시 고백구 행복동",
+            deliveryAddress = testDeliveryAddress,
             orderMenuDtoList = mutableListOf(testOrderMenuDto)
         )
+
         val testOrderTableDto = OrderTableDto(
             userId = TEST_USER_ID,
             emptyness = false,
@@ -84,7 +97,8 @@ class OrderTableServiceTest @Autowired constructor(
             orderDtoList = mutableListOf(testOrderDto)
         )
 
-        assertDoesNotThrow { orderTableService.create(testOrderTableDto) }
+        assertDoesNotThrow {
+            orderTableService.create(testOrderTableDto) }
 
         val savedOrder = orderRepository.findAll().firstOrNull()
         val savedOrderTable = orderTableRepository.findByUserId(1L)
@@ -106,7 +120,8 @@ class OrderTableServiceTest @Autowired constructor(
     fun orderInfoSuccess1() {
         setUpOrders()
 
-        val result = assertDoesNotThrow { orderTableService.orderInfo(1L) }
+        val result = assertDoesNotThrow {
+            orderTableService.orderInfo(1L) }
 
         assertAll(
             { assertNotNull(result) },
@@ -132,7 +147,7 @@ class OrderTableServiceTest @Autowired constructor(
             paymentPrice = 0,
             paymentMethod = "카드결제",
             requirement = "?",
-            deliveryAddress = "사랑시 고백구 행복동",
+            deliveryAddress = testDeliveryAddress,
             orderTable = testOrderTable
         )
 
