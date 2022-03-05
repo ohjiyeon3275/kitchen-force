@@ -3,6 +3,7 @@ package com.kitchenforce.controller
 import com.kitchenforce.domain.orders.dto.OrderDto
 import com.kitchenforce.service.OrderService
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/order")
@@ -11,7 +12,7 @@ class OrderController(
 ) {
 
     @PostMapping("")
-    fun createOrder(@RequestBody dto: OrderDto) {
+    fun createOrder(@RequestBody @Valid dto: OrderDto) {
         orderService.create(dto)
     }
 

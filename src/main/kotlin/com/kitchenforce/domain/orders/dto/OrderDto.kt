@@ -2,6 +2,7 @@ package com.kitchenforce.domain.orders.dto
 
 import com.kitchenforce.domain.enum.OrderStatus
 import com.kitchenforce.domain.enum.OrderType
+import javax.validation.Valid
 
 data class OrderDto(
     val orderType: OrderType,
@@ -9,6 +10,7 @@ data class OrderDto(
     val paymentMethod: String,
     val requirement: String,
     val deliveryAddress: String,
+    @Valid
     val orderTableDto: OrderTableDto?,
     val orderMenuDtoList: List<OrderMenuDto>
 )
