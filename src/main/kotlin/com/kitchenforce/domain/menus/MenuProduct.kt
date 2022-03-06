@@ -19,7 +19,7 @@ class MenuProduct(
     val id: Int?,
 
     @Column(nullable = false)
-    val quantity: Int,
+    val quantity: Int?,
 
     @ManyToOne
     @JoinColumn(name = "menu_id")
@@ -27,5 +27,5 @@ class MenuProduct(
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    var product: Product? = null,
+    var product: Product,
 ) : AuditEntity()
