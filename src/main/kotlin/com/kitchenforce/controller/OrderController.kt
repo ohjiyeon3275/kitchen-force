@@ -20,4 +20,9 @@ class OrderController(
     fun getOrderList(): List<OrderDto> {
         return orderService.get()
     }
+
+    @PatchMapping("")
+    fun updateStatus(id: Long) {
+        orderService.update(id)
+    }
 }

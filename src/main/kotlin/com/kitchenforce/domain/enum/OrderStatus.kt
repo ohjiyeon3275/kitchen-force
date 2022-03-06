@@ -5,5 +5,6 @@ enum class OrderStatus(
 ) {
     WAITING("주문 대기"),
     ACCEPTED("주문 접수"),
-    CLOSE("주문 종료"),
+    SERVED("주문 서빙"),
+    CLOSED("주문 종료"),
 }

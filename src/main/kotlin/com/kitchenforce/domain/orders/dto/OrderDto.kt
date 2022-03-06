@@ -6,7 +6,7 @@ import javax.validation.Valid
 
 data class OrderDto(
     val orderType: OrderType,
-    val orderStatus: OrderStatus,
+    val orderStatus: OrderStatus?,
     val paymentMethod: String,
     val requirement: String,
     val deliveryAddress: String,

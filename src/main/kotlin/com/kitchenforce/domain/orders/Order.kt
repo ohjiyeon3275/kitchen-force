@@ -39,4 +39,7 @@ class Order(
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     lateinit var orderMenuList: List<OrderMenu>
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "order")
+    var orderTable: OrderTable? = null
 }
