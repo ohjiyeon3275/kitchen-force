@@ -1,21 +1,15 @@
 package com.kitchenforce.service
 
-import com.kitchenforce.domain.delivery.DeliveryAddressRepository
-import com.kitchenforce.domain.menus.MenuRepository
-import com.kitchenforce.domain.orders.OrderMenuRepository
-import com.kitchenforce.domain.orders.OrderRepository
+import com.kitchenforce.common.exception.NotFoundException
 import com.kitchenforce.domain.orders.OrderTable
 import com.kitchenforce.domain.orders.OrderTableRepository
 import com.kitchenforce.domain.orders.dto.OrderTableDto
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class OrderTableService(
     private val orderTableRepository: OrderTableRepository,
-    private val orderRepository: OrderRepository,
-    private val orderMenuRepository: OrderMenuRepository,
-    private val menuRepository: MenuRepository,
-    private val deliveryAddressRepository: DeliveryAddressRepository
 ) {
 
     fun get(): List<OrderTableDto> {
@@ -29,5 +23,24 @@ class OrderTableService(
                 numberOfGuests = it.numberOfGuests
             )
         }.also { return it }
+    }
+
+    fun get(tableName: String): Boolean {
+
+        val orderTable: OrderTable? = orderTableRepository.findByNameAndEmptyness(tableName, false)
+
+        orderTable?.let {
+            return false
+        } ?: return true
+    }
+
+    @Transactional
+    fun update(numberOfGuests: Int, tableName: String) {
+        val orderTable: OrderTable? = orderTableRepository.findByNameAndEmptyness(tableName, false)
+
+        orderTable?.let {
+            orderTable.numberOfGuests = numberOfGuests
+            orderTableRepository.save(orderTable)
+        } ?: throw NotFoundException("접수된 테이블이 존재하지 않습니다.")
     }
 }

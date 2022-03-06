@@ -2,10 +2,14 @@ package com.kitchenforce.controller
 
 import com.kitchenforce.domain.orders.dto.OrderTableDto
 import com.kitchenforce.service.OrderTableService
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.constraints.Min
 
+@Validated
 @RestController
 @RequestMapping("/api/order-table")
 class OrderTableController(
@@ -15,5 +19,15 @@ class OrderTableController(
     @GetMapping("")
     fun getOrderTableList(): List<OrderTableDto> {
         return orderTableService.get()
+    }
+
+    @GetMapping("")
+    fun getEmptyness(tableName: String): Boolean {
+        return orderTableService.get(tableName)
+    }
+
+    @PatchMapping("")
+    fun updateNumberOfGuests(@Min(0) numberOfGuests: Int, tableName: String) {
+        orderTableService.update(numberOfGuests, tableName)
     }
 }

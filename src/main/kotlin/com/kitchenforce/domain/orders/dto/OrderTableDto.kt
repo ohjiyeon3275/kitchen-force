@@ -5,6 +5,6 @@ import javax.validation.constraints.Min
 data class OrderTableDto(
     val tableName: String,
     val emptyness: Boolean,
-    @Min(value = 0)
+    @Min(0)
     val numberOfGuests: Int
 )
