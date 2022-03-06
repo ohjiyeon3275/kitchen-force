@@ -12,5 +12,6 @@ data class OrderDto(
     val deliveryAddress: String,
     @Valid
     val orderTableDto: OrderTableDto?,
+    @Valid
     val orderMenuDtoList: List<OrderMenuDto>
 )

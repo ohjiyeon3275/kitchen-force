@@ -43,10 +43,13 @@ class OrderService(
         }
 
         dto.orderMenuDtoList.map {
+
+            if(menuRepository.findByName(it.menuName)?.isHidden == true) throw NotFoundException("숨겨진 메뉴입니다.")
+
             OrderMenu(
                 quantity = it.quantity,
                 order = order,
-                menu = menuRepository.findByName(it.menuName)
+                menu = menuRepository.findByName(it.menuName) ?: throw NotFoundException("메뉴가 존재하지 않습니다.")
             )
         }.also { orderMenuRepository.saveAll(it) }
     }
