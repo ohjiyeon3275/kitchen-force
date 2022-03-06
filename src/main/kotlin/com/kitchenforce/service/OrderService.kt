@@ -32,7 +32,7 @@ class OrderService(
         if (dto.orderType == OrderType.EATIN) {
             val orderTable: OrderTable = OrderTable(
                 name = dto.orderTableDto?.tableName ?: "테이블 지정 안됨.",
-                emptyness = dto.orderTableDto?.emptyness ?: false,
+                emptiness = dto.orderTableDto?.emptiness ?: false,
                 numberOfGuests = dto.orderTableDto?.numberOfGuests ?: 0,
                 order = order
             )

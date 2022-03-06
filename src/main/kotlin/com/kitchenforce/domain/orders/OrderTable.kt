@@ -10,7 +10,7 @@ class OrderTable(
     var name: String,
 
     @Column
-    var emptyness: Boolean,
+    var emptiness: Boolean,
 
     @Column
     var numberOfGuests: Int,

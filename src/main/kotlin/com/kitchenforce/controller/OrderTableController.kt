@@ -22,7 +22,7 @@ class OrderTableController(
     }
 
     @GetMapping("")
-    fun getEmptyness(tableName: String): Boolean {
+    fun getEmptiness(tableName: String): Boolean {
         return orderTableService.get(tableName)
     }
 

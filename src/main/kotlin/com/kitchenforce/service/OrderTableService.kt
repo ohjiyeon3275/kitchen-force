@@ -18,7 +18,7 @@ class OrderTableService(
 
         orderTableList.map {
             OrderTableDto(
-                emptyness = it.emptyness,
+                emptiness = it.emptiness,
                 tableName = it.name,
                 numberOfGuests = it.numberOfGuests
             )
@@ -27,7 +27,7 @@ class OrderTableService(
 
     fun get(tableName: String): Boolean {
 
-        val orderTable: OrderTable? = orderTableRepository.findByNameAndEmptyness(tableName, false)
+        val orderTable: OrderTable? = orderTableRepository.findByNameAndEmptiness(tableName, false)
 
         orderTable?.let {
             return false
@@ -36,7 +36,7 @@ class OrderTableService(
 
     @Transactional
     fun update(numberOfGuests: Int, tableName: String) {
-        val orderTable: OrderTable? = orderTableRepository.findByNameAndEmptyness(tableName, false)
+        val orderTable: OrderTable? = orderTableRepository.findByNameAndEmptiness(tableName, false)
 
         orderTable?.let {
             orderTable.numberOfGuests = numberOfGuests
