@@ -3,8 +3,8 @@ package com.kitchenforce.dto.menus
 import com.sun.istack.NotNull
 
 data class MenuCreateRequestDto(
-    val name: String,
+    private val name: String,
     @NotNull
-    val products: Map<Long, Int>,
-    val price: Int
+    private val products: List<MenuProductRequestDto>,
+    private val price: Int
 )
