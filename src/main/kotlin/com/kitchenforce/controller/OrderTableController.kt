@@ -3,10 +3,7 @@ package com.kitchenforce.controller
 import com.kitchenforce.domain.orders.dto.OrderTableDto
 import com.kitchenforce.service.OrderTableService
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.validation.constraints.Min
 
 @Validated
@@ -21,8 +18,8 @@ class OrderTableController(
         return orderTableService.get()
     }
 
-    @GetMapping("")
-    fun getEmptiness(tableName: String): Boolean {
+    @GetMapping("/{tableName}")
+    fun getEmptiness(@PathVariable tableName: String): Boolean {
         return orderTableService.get(tableName)
     }
 

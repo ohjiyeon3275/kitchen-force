@@ -30,7 +30,10 @@ class OrderService(
             requirement = dto.requirement,
             deliveryAddress = deliveryAddressRepository.findByAddress(dto.deliveryAddress)
         )
-        orderRepository.save(order)
+        val saved = orderRepository.save(order)
+        println("저장되었습니다.")
+        println(saved.id)
+        println(saved.orderType)
 
         if (dto.orderType == OrderType.EATIN) {
             val orderTable = OrderTable(
@@ -44,7 +47,7 @@ class OrderService(
 
         dto.orderMenuDtoList.map {
 
-            if(menuRepository.findByName(it.menuName)?.isHidden == true) throw NotFoundException("숨겨진 메뉴입니다.")
+            if (menuRepository.findByName(it.menuName)?.isHidden == true) throw NotFoundException("숨겨진 메뉴입니다.")
 
             OrderMenu(
                 quantity = it.quantity,
@@ -71,6 +74,7 @@ class OrderService(
         }.also { return it }
     }
 
+    @Transactional
     fun update(id: Long) {
 
         val order: Order? = orderRepository.findByIdOrNull(id)
@@ -82,7 +86,7 @@ class OrderService(
                 OrderStatus.ACCEPTED -> order.orderStatus = OrderStatus.SERVED
                 OrderStatus.SERVED -> {
                     order.orderStatus = OrderStatus.CLOSED
-                    order.orderTable?.emptiness = true
+                    // order.orderTable?.emptiness = true
                 }
             }
             orderRepository.save(order)
