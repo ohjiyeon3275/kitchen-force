@@ -80,13 +80,14 @@ class OrderService(
         val order: Order? = orderRepository.findByIdOrNull(id)
 
         order?.let {
+            val orderTable: OrderTable? = orderTableRepository.findByOrderAndEmptiness(order, false)
 
             when (order.orderStatus) {
                 OrderStatus.WAITING -> order.orderStatus = OrderStatus.ACCEPTED
                 OrderStatus.ACCEPTED -> order.orderStatus = OrderStatus.SERVED
                 OrderStatus.SERVED -> {
                     order.orderStatus = OrderStatus.CLOSED
-                    // order.orderTable?.emptiness = true
+                    orderTable?.emptiness = true
                 }
             }
             orderRepository.save(order)

@@ -8,6 +8,7 @@ import com.kitchenforce.domain.menus.MenuGroupRepository
 import com.kitchenforce.domain.menus.MenuRepository
 import com.kitchenforce.domain.orders.OrderMenuRepository
 import com.kitchenforce.domain.orders.OrderRepository
+import com.kitchenforce.domain.orders.OrderTable
 import com.kitchenforce.domain.orders.OrderTableRepository
 import com.kitchenforce.domain.orders.dto.OrderDto
 import com.kitchenforce.domain.orders.dto.OrderMenuDto
@@ -165,18 +166,24 @@ class OrderServiceTest @Autowired constructor(
          */
 
         // 주문 상태 : WAITING -> ACCEPTED
-        orderService.update(1L)
-        val acceptedOrder = orderRepository.findByIdOrNull(1L)
+        orderService.update(3L)
+        val acceptedOrder = orderRepository.findByIdOrNull(3L)
         assertThat(acceptedOrder?.orderStatus).isEqualTo(OrderStatus.ACCEPTED)
 
         // 주문 상태 : ACCEPTED -> SERVED
-        orderService.update(1L)
-        val servedOrder = orderRepository.findByIdOrNull(1L)
+        orderService.update(3L)
+        val servedOrder = orderRepository.findByIdOrNull(3L)
         assertThat(servedOrder?.orderStatus).isEqualTo(OrderStatus.SERVED)
 
         // 주문 상태 : SERVED -> CLOSED
-        orderService.update(1L)
-        val closedOrder = orderRepository.findByIdOrNull(1L)
+        orderService.update(3L)
+        val closedOrder = orderRepository.findByIdOrNull(3L)
         assertThat(closedOrder?.orderStatus).isEqualTo(OrderStatus.CLOSED)
+
+        // 주문 테이블의 모든 매장 주문이 완료되면 빈 테이블로 설정한다.
+        closedOrder?.let {
+            val closedOrderTable: OrderTable? = orderTableRepository.findByOrderAndEmptiness(closedOrder, false)
+            assertThat(closedOrderTable).isEqualTo(null)
+        }
     }
 }
