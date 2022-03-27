@@ -1,6 +1,7 @@
 package com.kitchenforce.service
 
 import com.kitchenforce.common.exception.NotFoundException
+import com.kitchenforce.domain.delivery.DeliveryAddress
 import com.kitchenforce.domain.delivery.DeliveryAddressRepository
 import com.kitchenforce.domain.enum.OrderStatus
 import com.kitchenforce.domain.enum.OrderType
@@ -30,6 +31,15 @@ class OrderService(
             requirement = dto.requirement,
             deliveryAddress = deliveryAddressRepository.findByAddress(dto.deliveryAddress)
         )
+
+        val testDeliveryAddress = DeliveryAddress(
+            address = "테스트시 주소동 123, 123호",
+            phoneNumber = "010-1234-1234",
+            accountStatus = "active",
+            deliveryStatus = "주문완료",
+            note = "리뷰이벤트"
+        )
+
         val saved = orderRepository.save(order)
         println("저장되었습니다.")
         println(saved.id)
@@ -67,7 +77,7 @@ class OrderService(
                 orderStatus = it.orderStatus,
                 paymentMethod = it.paymentMethod,
                 requirement = it.requirement,
-                deliveryAddress = it.deliveryAddress?.address ?: "등록된 주소 없음.",
+                deliveryAddress = it.deliveryAddress?: DeliveryAddress(-1,"","","","",""),
                 orderTableDto = null,
                 orderMenuDtoList = ArrayList()
             )

@@ -54,12 +54,6 @@ class OrderTableServiceTest @Autowired constructor(
         menuGroup = testMenuGroup
     )
 
-    val testDeliveryAddress = DeliveryAddress(1L,
-        "사랑시 고백구 행복동",
-        "123",
-        "active",
-        "orderDone",
-        "조심히")
 
     @BeforeEach
     fun setUpMenus() {
@@ -163,6 +157,15 @@ class OrderTableServiceTest @Autowired constructor(
  */
     companion object {
 
+
+        private val testDeliveryAddress = DeliveryAddress(1L,
+        "사랑시 고백구 행복동",
+        "123",
+        "active",
+        "orderDone",
+        "조심히"
+        )
+
         private val testMenuGroup = MenuGroup(
             id = null,
             name = "메뉴그룹1"
@@ -192,7 +195,7 @@ class OrderTableServiceTest @Autowired constructor(
             orderStatus = OrderStatus.WAITING,
             paymentMethod = "card",
             requirement = "맛있게 부탁드려요 :)",
-            deliveryAddress = "서울특별시 마포구 햇님아파트 210동 801호",
+            deliveryAddress = testDeliveryAddress,
             orderTableDto = orderTableDto,
             orderMenuDtoList = listOf(orderMenuDto)
         )

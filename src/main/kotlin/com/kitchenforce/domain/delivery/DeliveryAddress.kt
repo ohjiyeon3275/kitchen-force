@@ -3,9 +3,9 @@ package com.kitchenforce.domain.delivery
 import com.kitchenforce.common.entity.AuditEntity
 import javax.persistence.*
 
+@Table(name = "delivery_addresses")
 @Entity
-@Table
-class DeliveryAddress(
+class DeliveryAddress (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
