@@ -31,9 +31,9 @@ class OrderTableService(
 
         orderTable?.let {
             val orderTableDto = OrderTableDto(
-                tableName = orderTable.name,
-                emptiness = orderTable.emptiness,
-                numberOfGuests = orderTable.numberOfGuests
+                tableName = it.name,
+                emptiness = it.emptiness,
+                numberOfGuests = it.numberOfGuests
             )
             return orderTableDto
         } ?: return null
@@ -44,8 +44,8 @@ class OrderTableService(
         val orderTable: OrderTable? = orderTableRepository.findByNameAndEmptiness(tableName, false)
 
         orderTable?.let {
-            orderTable.numberOfGuests = numberOfGuests
-            orderTableRepository.save(orderTable)
+            it.numberOfGuests = numberOfGuests
+            orderTableRepository.save(it)
         } ?: throw NotFoundException("접수된 테이블이 존재하지 않습니다.")
     }
 }
