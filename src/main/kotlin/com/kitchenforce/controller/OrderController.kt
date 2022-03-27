@@ -21,8 +21,8 @@ class OrderController(
         return orderService.get()
     }
 
-    @PatchMapping("")
-    fun updateStatus(id: Long) {
+    @PutMapping("/{id}")
+    fun updateStatus(@PathVariable id: Long) {
         orderService.update(id)
     }
 }

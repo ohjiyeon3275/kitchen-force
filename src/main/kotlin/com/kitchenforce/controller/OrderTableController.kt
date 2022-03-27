@@ -23,8 +23,8 @@ class OrderTableController(
         return orderTableService.get(tableName)
     }
 
-    @PatchMapping("")
-    fun updateNumberOfGuests(@Min(0) numberOfGuests: Int, tableName: String) {
+    @PutMapping("/{numberOfGuests}/{tableName}")
+    fun updateNumberOfGuests(@PathVariable @Min(0) numberOfGuests: Int, @PathVariable tableName: String) {
         orderTableService.update(numberOfGuests, tableName)
     }
 }
