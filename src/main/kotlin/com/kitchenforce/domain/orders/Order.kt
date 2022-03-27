@@ -1,7 +1,6 @@
 package com.kitchenforce.domain.orders
 
 import com.kitchenforce.common.entity.AuditEntity
-import com.kitchenforce.domain.delivery.DeliveryAddress
 import com.kitchenforce.domain.enum.OrderStatus
 import com.kitchenforce.domain.enum.OrderType
 import javax.persistence.*
@@ -27,7 +26,7 @@ class Order(
     @Column
     var requirement: String,
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "delivery_address_id")
     var deliveryAddress: DeliveryAddress?,
 

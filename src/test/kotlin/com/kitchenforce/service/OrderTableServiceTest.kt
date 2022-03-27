@@ -2,6 +2,8 @@ package com.kitchenforce.service
 
 import com.kitchenforce.domain.enum.OrderStatus
 import com.kitchenforce.domain.enum.OrderType
+import com.kitchenforce.domain.delivery.DeliveryAddress
+import com.kitchenforce.domain.delivery.DeliveryAddressRepository
 import com.kitchenforce.domain.menus.Menu
 import com.kitchenforce.domain.menus.MenuGroup
 import com.kitchenforce.domain.menus.MenuGroupRepository
@@ -35,7 +37,8 @@ class OrderTableServiceTest @Autowired constructor(
     private val orderRepository: OrderRepository,
     private val orderMenuRepository: OrderMenuRepository,
     private val menuRepository: MenuRepository,
-    private val menuGroupRepository: MenuGroupRepository
+    private val menuGroupRepository: MenuGroupRepository,
+    private val deliveryAddressRepository: DeliveryAddressRepository
 ) {
 /*
     val testMenuGroup = MenuGroup(
@@ -50,6 +53,13 @@ class OrderTableServiceTest @Autowired constructor(
         isHidden = false,
         menuGroup = testMenuGroup
     )
+
+    val testDeliveryAddress = DeliveryAddress(1L,
+        "사랑시 고백구 행복동",
+        "123",
+        "active",
+        "orderDone",
+        "조심히")
 
     @BeforeEach
     fun setUpMenus() {
