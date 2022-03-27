@@ -90,6 +90,7 @@ class OrderService(
                     orderTable?.emptiness = true
                 }
             }
+            orderTable?.let { orderTableRepository.save(orderTable) }
             orderRepository.save(order)
         } ?: throw NotFoundException("주문이 존재하지 않습니다.")
     }

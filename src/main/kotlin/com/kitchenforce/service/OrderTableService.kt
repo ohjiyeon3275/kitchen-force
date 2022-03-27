@@ -36,7 +36,7 @@ class OrderTableService(
                 numberOfGuests = orderTable.numberOfGuests
             )
             return orderTableDto
-        }?:return null
+        } ?: return null
     }
 
     @Transactional
