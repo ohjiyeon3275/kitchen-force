@@ -22,7 +22,7 @@ class OrderMenu(
 
     @ManyToOne
     @JoinColumn(name = "menu_id")
-    var menu: Menu?,
+    var menu: Menu,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

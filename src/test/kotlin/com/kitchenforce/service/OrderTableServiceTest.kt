@@ -1,28 +1,24 @@
 package com.kitchenforce.service
 
+import com.kitchenforce.domain.enum.OrderStatus
+import com.kitchenforce.domain.enum.OrderType
 import com.kitchenforce.domain.menus.Menu
 import com.kitchenforce.domain.menus.MenuGroup
 import com.kitchenforce.domain.menus.MenuGroupRepository
 import com.kitchenforce.domain.menus.MenuRepository
-import com.kitchenforce.domain.orders.Order
-import com.kitchenforce.domain.orders.OrderMenu
 import com.kitchenforce.domain.orders.OrderMenuRepository
 import com.kitchenforce.domain.orders.OrderRepository
-import com.kitchenforce.domain.orders.OrderTable
 import com.kitchenforce.domain.orders.OrderTableRepository
 import com.kitchenforce.domain.orders.dto.OrderDto
 import com.kitchenforce.domain.orders.dto.OrderMenuDto
 import com.kitchenforce.domain.orders.dto.OrderTableDto
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.BeforeEach
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
-import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 
@@ -34,13 +30,14 @@ const val TEST_USER_ID = 1L
 @ActiveProfiles("test")
 class OrderTableServiceTest @Autowired constructor(
     private val orderTableService: OrderTableService,
+    private val orderService: OrderService,
     private val orderTableRepository: OrderTableRepository,
     private val orderRepository: OrderRepository,
     private val orderMenuRepository: OrderMenuRepository,
     private val menuRepository: MenuRepository,
     private val menuGroupRepository: MenuGroupRepository
 ) {
-
+/*
     val testMenuGroup = MenuGroup(
         id = null,
         name = "메뉴그룹1"
@@ -151,5 +148,96 @@ class OrderTableServiceTest @Autowired constructor(
 
         testOrder.orderMenuList = mutableListOf(testOrderMenu)
         orderRepository.save(testOrder)
+    }
+
+ */
+    companion object {
+
+        private val testMenuGroup = MenuGroup(
+            id = null,
+            name = "메뉴그룹1"
+        )
+
+        private val testMenu1 = Menu(
+            id = null,
+            name = "메뉴1",
+            price = 1_000,
+            isHidden = false,
+            menuGroup = testMenuGroup
+        )
+
+        private val orderMenuDto = OrderMenuDto(
+            quantity = 1,
+            menuName = "메뉴1"
+        )
+
+        private val orderTableDto = OrderTableDto(
+            tableName = "1번",
+            emptiness = false,
+            numberOfGuests = 4
+        )
+
+        private val eatinOrderDto = OrderDto(
+            orderType = OrderType.EATIN,
+            orderStatus = OrderStatus.WAITING,
+            paymentMethod = "card",
+            requirement = "맛있게 부탁드려요 :)",
+            deliveryAddress = "서울특별시 마포구 햇님아파트 210동 801호",
+            orderTableDto = orderTableDto,
+            orderMenuDtoList = listOf(orderMenuDto)
+        )
+
+        @BeforeAll
+        @JvmStatic
+        fun BeforeAll(
+            @Autowired menuRepository: MenuRepository,
+            @Autowired menuGroupRepository: MenuGroupRepository,
+            @Autowired orderService: OrderService,
+        ) {
+            menuGroupRepository.save(testMenuGroup)
+            menuRepository.save(testMenu1)
+
+            orderService.create(eatinOrderDto)
+        }
+    }
+
+    @Test
+    @DisplayName("주문 테이블 목록을 조회할 수 있다.")
+    @Transactional
+    fun getOrderTableListTest() {
+
+        val orderTableDtoList = orderTableService.get()
+
+        assertThat(orderTableDtoList[0].tableName).isEqualTo("1번")
+        assertThat(orderTableDtoList[0].emptiness).isEqualTo(false)
+        assertThat(orderTableDtoList[0].numberOfGuests).isEqualTo(4)
+    }
+
+    @Test
+    @DisplayName("테이블이 빈테이블인지 아닌지 확인할 수 있다.")
+    @Transactional
+    fun getEmptinessTest() {
+
+        // 주문이 들어오지 않은 테이블의 경우, 빈테이블.
+        val emptiness = orderTableService.get("2번")
+        assertThat(emptiness).isEqualTo(true)
+
+        // 주문이 들어온 테이블의 경우
+        val notEmptiness = orderTableService.get("1번")
+        assertThat(notEmptiness).isEqualTo(false)
+    }
+
+    @Test
+    @DisplayName("방문한 손님 수를 변경할 수 있다.")
+    @Transactional
+    fun updateNumberOfGuestsTest() {
+
+        val orderTable = orderTableRepository.findByIdOrNull(1L)
+        assertThat(orderTable?.numberOfGuests).isEqualTo(4)
+
+        // 1번 테이블의 손님수를 4명에서 5명으로 변경.
+        orderTableService.update(5, "1번")
+        val updatedOrderTable = orderTableRepository.findByIdOrNull(1L)
+        assertThat(updatedOrderTable?.numberOfGuests).isEqualTo(5)
     }
 }
