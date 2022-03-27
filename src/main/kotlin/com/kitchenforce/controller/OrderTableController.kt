@@ -19,7 +19,7 @@ class OrderTableController(
     }
 
     @GetMapping("/{tableName}")
-    fun getEmptiness(@PathVariable tableName: String): Boolean {
+    fun getTableInfo(@PathVariable tableName: String): OrderTableDto? {
         return orderTableService.get(tableName)
     }
 

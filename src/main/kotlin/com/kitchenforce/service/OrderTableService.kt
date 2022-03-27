@@ -25,13 +25,18 @@ class OrderTableService(
         }.also { return it }
     }
 
-    fun get(tableName: String): Boolean {
+    fun get(tableName: String): OrderTableDto? {
 
         val orderTable: OrderTable? = orderTableRepository.findByNameAndEmptiness(tableName, false)
 
         orderTable?.let {
-            return false
-        } ?: return true
+            val orderTableDto = OrderTableDto(
+                tableName = orderTable.name,
+                emptiness = orderTable.emptiness,
+                numberOfGuests = orderTable.numberOfGuests
+            )
+            return orderTableDto
+        }?:return null
     }
 
     @Transactional
