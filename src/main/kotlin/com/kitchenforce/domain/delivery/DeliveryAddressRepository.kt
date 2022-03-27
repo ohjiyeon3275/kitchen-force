@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface DeliveryAddressRepository : JpaRepository<DeliveryAddress, Int> {
+interface DeliveryAddressRepository : JpaRepository<DeliveryAddress, Long> {
 
-    fun findByAddress(address: String): DeliveryAddress?
+    fun findByAddress(address: DeliveryAddress): DeliveryAddress?
 }

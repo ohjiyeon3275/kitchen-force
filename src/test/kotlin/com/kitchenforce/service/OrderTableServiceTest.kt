@@ -2,6 +2,8 @@ package com.kitchenforce.service
 
 import com.kitchenforce.domain.enum.OrderStatus
 import com.kitchenforce.domain.enum.OrderType
+import com.kitchenforce.domain.delivery.DeliveryAddress
+import com.kitchenforce.domain.delivery.DeliveryAddressRepository
 import com.kitchenforce.domain.menus.Menu
 import com.kitchenforce.domain.menus.MenuGroup
 import com.kitchenforce.domain.menus.MenuGroupRepository
@@ -35,7 +37,8 @@ class OrderTableServiceTest @Autowired constructor(
     private val orderRepository: OrderRepository,
     private val orderMenuRepository: OrderMenuRepository,
     private val menuRepository: MenuRepository,
-    private val menuGroupRepository: MenuGroupRepository
+    private val menuGroupRepository: MenuGroupRepository,
+    private val deliveryAddressRepository: DeliveryAddressRepository
 ) {
 /*
     val testMenuGroup = MenuGroup(
@@ -50,6 +53,7 @@ class OrderTableServiceTest @Autowired constructor(
         isHidden = false,
         menuGroup = testMenuGroup
     )
+
 
     @BeforeEach
     fun setUpMenus() {
@@ -153,6 +157,15 @@ class OrderTableServiceTest @Autowired constructor(
  */
     companion object {
 
+
+        private val testDeliveryAddress = DeliveryAddress(1L,
+        "사랑시 고백구 행복동",
+        "123",
+        "active",
+        "orderDone",
+        "조심히"
+        )
+
         private val testMenuGroup = MenuGroup(
             id = null,
             name = "메뉴그룹1"
@@ -182,7 +195,7 @@ class OrderTableServiceTest @Autowired constructor(
             orderStatus = OrderStatus.WAITING,
             paymentMethod = "card",
             requirement = "맛있게 부탁드려요 :)",
-            deliveryAddress = "서울특별시 마포구 햇님아파트 210동 801호",
+            deliveryAddress = testDeliveryAddress,
             orderTableDto = orderTableDto,
             orderMenuDtoList = listOf(orderMenuDto)
         )

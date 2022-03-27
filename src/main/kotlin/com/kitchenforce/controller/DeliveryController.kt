@@ -10,10 +10,9 @@ class DeliveryController(
     private val deliveryService: DeliveryService
 ) {
 
-    @PostMapping("/update/complete/{riderId}/{deliveryId}")
-    fun updateStatusToComplete(@PathVariable riderId: Long,
-                               @PathVariable deliveryId: Long): DeliveryAddress {
+    @PutMapping("/{deliveryId}")
+    fun updateStatusToComplete(@PathVariable deliveryId: Long): DeliveryAddress {
 
-        return deliveryService.updateStatusToComplete(riderId, deliveryId)
+        return deliveryService.updateStatusToComplete(deliveryId)
     }
 }
