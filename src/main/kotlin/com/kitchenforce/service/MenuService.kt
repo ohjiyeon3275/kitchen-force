@@ -18,15 +18,18 @@ class MenuService(
 ) {
 
     @Transactional
-    fun createMenu(req: MenuCreateRequestDto, menuGroup: Int){
-        val group: MenuGroup = menuGroupRepository.findByIdOrNull(menuGroup)?: throw IllegalStateException("MENU GROUP NOT FOUND")
+    fun createMenu(req: MenuCreateRequestDto, menuGroup: Int) {
+        val group: MenuGroup = menuGroupRepository.findByIdOrNull(menuGroup) ?: throw IllegalStateException("MENU GROUP NOT FOUND")
         val menu: Menu = menuRepository.save(Menu(null, req.name, req.price, menuGroup = group))
-        for (product in req.products){
+        req.products.forEach {
             menuProductRepository.save(
-                MenuProduct(null,
-                    product.value,
+                MenuProduct(
+                    null,
+                    it.number,
                     menu,
-                    productRepository.findByIdOrNull(product.key)?: throw IllegalStateException("PRODUCT NOT FOUND")))
+                    productRepository.findByIdOrNull(it.productId) ?: throw IllegalStateException("PRODUCT NOT FOUND")
+                )
+            )
         }
     }
 

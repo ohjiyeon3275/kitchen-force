@@ -1,6 +1,6 @@
 package com.kitchenforce.service
 
-import com.kitchenforce.domain.delivery.DeliveryAddress
+import com.kitchenforce.domain.delivery.Delivery
 import com.kitchenforce.domain.enum.OrderStatus
 import com.kitchenforce.domain.enum.OrderType
 import com.kitchenforce.domain.menus.Menu
@@ -15,7 +15,7 @@ import com.kitchenforce.domain.orders.dto.OrderDto
 import com.kitchenforce.domain.orders.dto.OrderMenuDto
 import com.kitchenforce.domain.orders.dto.OrderTableDto
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -34,12 +34,10 @@ class OrderServiceTest @Autowired constructor(
 
     companion object {
 
-        private val testDeliveryAddress = DeliveryAddress(
+        private val testDeliveryAddress = Delivery(
             address = "테스트시 주소동 123, 123호",
-            phoneNumber = "010-1234-1234",
-            accountStatus = "active",
             deliveryStatus = "주문완료",
-            note = "리뷰이벤트"
+            note = "리뷰이벤트",
         )
 
         private val testMenuGroup = MenuGroup(
@@ -71,7 +69,7 @@ class OrderServiceTest @Autowired constructor(
             orderStatus = OrderStatus.WAITING,
             paymentMethod = "card",
             requirement = "맛있게 부탁드려요 :)",
-            deliveryAddress = testDeliveryAddress,
+            delivery = testDeliveryAddress,
             orderTableDto = null,
             orderMenuDtoList = listOf(orderMenuDto)
         )
@@ -81,7 +79,7 @@ class OrderServiceTest @Autowired constructor(
             orderStatus = OrderStatus.WAITING,
             paymentMethod = "card",
             requirement = "맛있게 부탁드려요 :)",
-            deliveryAddress = testDeliveryAddress,
+            delivery = testDeliveryAddress,
             orderTableDto = null,
             orderMenuDtoList = listOf(orderMenuDto)
         )
@@ -91,7 +89,7 @@ class OrderServiceTest @Autowired constructor(
             orderStatus = OrderStatus.WAITING,
             paymentMethod = "card",
             requirement = "맛있게 부탁드려요 :)",
-            deliveryAddress = testDeliveryAddress,
+            delivery = testDeliveryAddress,
             orderTableDto = orderTableDto,
             orderMenuDtoList = listOf(orderMenuDto)
         )

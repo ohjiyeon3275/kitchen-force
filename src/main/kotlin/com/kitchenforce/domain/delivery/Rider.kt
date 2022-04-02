@@ -19,6 +19,6 @@ class Rider(
 
     @OneToMany
     @JoinColumn(name = "rider_id")
-    var deliveryAddress: List<DeliveryAddress>
+    var deliveries: List<Delivery>
 
 ) : AuditEntity()
