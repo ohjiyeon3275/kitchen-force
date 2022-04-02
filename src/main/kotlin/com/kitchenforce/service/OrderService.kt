@@ -1,8 +1,8 @@
 package com.kitchenforce.service
 
 import com.kitchenforce.common.exception.NotFoundException
-import com.kitchenforce.domain.delivery.DeliveryAddress
-import com.kitchenforce.domain.delivery.DeliveryAddressRepository
+import com.kitchenforce.domain.delivery.Delivery
+import com.kitchenforce.domain.delivery.DeliveryRepository
 import com.kitchenforce.domain.enum.OrderStatus
 import com.kitchenforce.domain.enum.OrderType
 import com.kitchenforce.domain.menus.MenuRepository
@@ -18,7 +18,7 @@ class OrderService(
     private val orderTableRepository: OrderTableRepository,
     private val orderMenuRepository: OrderMenuRepository,
     private val menuRepository: MenuRepository,
-    private val deliveryAddressRepository: DeliveryAddressRepository
+    private val deliveryAddressRepository: DeliveryRepository
 ) {
     @Transactional
     fun create(dto: OrderDto) {
@@ -29,15 +29,13 @@ class OrderService(
             paymentMethod = dto.paymentMethod,
             paymentPrice = 0,
             requirement = dto.requirement,
-            deliveryAddress = deliveryAddressRepository.findByAddress(dto.deliveryAddress)
+            delivery = deliveryAddressRepository.findByAddress(dto.delivery.address)
         )
 
-        val testDeliveryAddress = DeliveryAddress(
-            address = "테스트시 주소동 123, 123호",
-            phoneNumber = "010-1234-1234",
-            accountStatus = "active",
+        val testDeliveryAddress = Delivery(
             deliveryStatus = "주문완료",
-            note = "리뷰이벤트"
+            address = "주소",
+            note = "리뷰이벤트",
         )
 
         val saved = orderRepository.save(order)
@@ -77,7 +75,7 @@ class OrderService(
                 orderStatus = it.orderStatus,
                 paymentMethod = it.paymentMethod,
                 requirement = it.requirement,
-                deliveryAddress = it.deliveryAddress?: DeliveryAddress(-1,"","","","",""),
+                delivery = it.delivery ?: Delivery(-1, "", "", ""),
                 orderTableDto = null,
                 orderMenuDtoList = ArrayList()
             )
