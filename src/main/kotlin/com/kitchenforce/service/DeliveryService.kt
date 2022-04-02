@@ -20,4 +20,8 @@ class DeliveryService(
 
         return deliveryAddressRepository.save(delivery)
     }
+
+    fun getDeliveryList(): List<DeliveryAddress> {
+        return deliveryAddressRepository.findAll();
+    }
 }

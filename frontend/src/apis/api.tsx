@@ -1,6 +1,6 @@
-import axios, {AxiosError} from "axios";
-import {ProductRequest, ProductResponse} from "./interfaces";
-import {showNotification} from "../utils/utils";
+import axios, { AxiosError } from "axios";
+import { ProductRequest, ProductResponse, DeliveryResponse } from "./interfaces";
+import { showNotification } from "../utils/utils";
 
 async function getProductListApi() : Promise<ProductResponse[]> {
     const response = await axios.get("/api/products")
@@ -15,4 +15,12 @@ async function createProduct(productName : string|null, price: number) : Promise
     return response.data;
 }
 
-export {getProductListApi,createProduct}
+async function getDeliveryListApi() : Promise<DeliveryResponse[]> {
+    const response = await axios.get("http://localhost:8080/api/delivery/list")
+    console.log("delivery-list get : " + response);
+    return response.data;
+}
+
+
+
+export {getProductListApi,createProduct, getDeliveryListApi}

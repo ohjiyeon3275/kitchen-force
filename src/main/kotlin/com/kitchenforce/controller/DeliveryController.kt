@@ -10,6 +10,12 @@ class DeliveryController(
     private val deliveryService: DeliveryService
 ) {
 
+    @GetMapping("/list")
+    fun getDeliveryList(): List<DeliveryAddress> {
+        println("list 들어욤")
+        return deliveryService.getDeliveryList();
+    }
+
     @PutMapping("/{deliveryId}")
     fun updateStatusToComplete(@PathVariable deliveryId: Long): DeliveryAddress {
 

@@ -4,7 +4,7 @@ import {ProductList} from "../components/Product/ProductList";
 import {DesktopOutlined, PieChartOutlined, UserOutlined} from "@ant-design/icons";
 import {KitchenMenu} from "../components/Menu/KitchenMenu";
 import {Order} from "../components/Order/Order";
-import {Delivery} from "../components/Delivery/Delivery";
+import { Delivery, DeliveryList } from "../components/Delivery/index";
 import {KitchenForceMain} from "../components/Main/KitchenForceMain";
 
 interface MainRoute {
@@ -74,6 +74,15 @@ export const routeList : MainRoute[] = [
         imageUrl: 'https://www.kindpng.com/picc/m/720-7200355_delivery-delivery-pictogram-free-png-transparent-png.png',
         icon: <UserOutlined/>,
         component: <Delivery/>,
+        subRouteList: []
+    },
+    {
+        key: 'delivery-router',
+        title: '배달 리스트',
+        path: '/delivery/list',
+        imageUrl: "",
+        icon: <UserOutlined/>,
+        component: <DeliveryList/>,
         subRouteList: []
     }
 ]
