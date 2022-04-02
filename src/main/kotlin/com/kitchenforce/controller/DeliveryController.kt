@@ -1,8 +1,11 @@
 package com.kitchenforce.controller
 
-import com.kitchenforce.domain.delivery.DeliveryAddress
+import com.kitchenforce.domain.delivery.dto.DeliveryCompleteDto
 import com.kitchenforce.service.DeliveryService
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/delivery")
@@ -17,8 +20,10 @@ class DeliveryController(
     }
 
     @PutMapping("/{deliveryId}")
-    fun updateStatusToComplete(@PathVariable deliveryId: Long): DeliveryAddress {
+    fun updateStatusToComplete(@PathVariable deliveryId: Long): DeliveryCompleteDto {
 
-        return deliveryService.updateStatusToComplete(deliveryId)
+        return deliveryService.updateStatusToComplete(deliveryId).run{
+            DeliveryCompleteDto.fromDomain(this)
+        }
     }
 }
