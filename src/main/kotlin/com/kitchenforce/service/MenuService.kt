@@ -24,9 +24,10 @@ class MenuService(
         for (product in req.products){
             menuProductRepository.save(
                 MenuProduct(null,
-                    product.value,
+//                    product,
+                    null,
                     menu,
-                    productRepository.findByIdOrNull(product.key)?: throw IllegalStateException("PRODUCT NOT FOUND")))
+                    productRepository.findByIdOrNull(product.productId)?: throw IllegalStateException("PRODUCT NOT FOUND")))
         }
     }
 
