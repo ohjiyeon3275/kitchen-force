@@ -23,7 +23,7 @@ val newDelivery =
 @AutoConfigureMockMvc
 internal class DeliveryControllerTest @Autowired constructor(
     val mockMvc: MockMvc,
-    val deliveryAddressRepository: DeliveryRepository,
+    val deliveryRepository: DeliveryRepository,
     val riderRepository: RiderRepository
 ) {
 
@@ -34,7 +34,7 @@ internal class DeliveryControllerTest @Autowired constructor(
         val newRider =
             Rider(1L, "rider", "1231231234", listOf(newDelivery))
 
-        deliveryAddressRepository.save(newDelivery)
+        deliveryRepository.save(newDelivery)
         riderRepository.save(newRider)
 
         val deliveryId = 1L
@@ -58,7 +58,7 @@ internal class DeliveryControllerTest @Autowired constructor(
         val newRider =
             Rider(1L, "rider", "1231231234", listOf(newDelivery))
 
-        deliveryAddressRepository.save(newDelivery)
+        deliveryRepository.save(newDelivery)
         riderRepository.save(newRider)
 
         val deliveryId = 2L // 이부분 오류뜨게 수정
@@ -73,4 +73,5 @@ internal class DeliveryControllerTest @Autowired constructor(
                 status { DeliveryException(DeliveryErrorCodeType.NOT_FOUND_DELIVERY) }
             }
     }
+
 }

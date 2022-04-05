@@ -9,15 +9,21 @@ import org.springframework.stereotype.Service
 
 @Service
 class DeliveryService(
-    val deliveryAddressRepository: DeliveryRepository,
+    val deliveryRepository : DeliveryRepository,
 ) {
     fun updateStatusToComplete(deliveryId: Long): Delivery {
 
-        val delivery = deliveryAddressRepository.findByIdOrNull(deliveryId)
+        val delivery = deliveryRepository.findByIdOrNull(deliveryId)
             ?: throw DeliveryException(DeliveryErrorCodeType.NOT_FOUND_DELIVERY)
 
         delivery.deliveryStatus = "배달완료"
 
-        return deliveryAddressRepository.save(delivery)
+        return deliveryRepository.save(delivery)
     }
+
+    fun getDeliveryList(): List<Delivery> {
+        return deliveryRepository.findAll()
+    }
+
+
 }
