@@ -8,24 +8,21 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.Table
 
+@Table(name = "delivery")
 @Entity
-@Table
-class DeliveryAddress(
+class Delivery(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int,
-
-    @Column(name = "address", nullable = false)
-    val address: String,
+    var id: Long? = null,
 
     @Column(nullable = false)
-    val customerPhoneNumber: String,
-
-    @Column(nullable = false)
-    val status: String,
+    var deliveryStatus: String,
 
     @Column
-    val note: String,
+    var address: String,
+
+    @Column
+    var note: String,
 
 ) : AuditEntity()

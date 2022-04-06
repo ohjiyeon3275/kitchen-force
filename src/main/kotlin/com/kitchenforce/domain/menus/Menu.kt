@@ -24,7 +24,7 @@ class Menu(
     val price: Int,
 
     @Column(nullable = false)
-    val isHidden: Boolean,
+    val isHidden: Boolean = false,
 
     @ManyToOne
     @JoinColumn(name = "menu_group_id")

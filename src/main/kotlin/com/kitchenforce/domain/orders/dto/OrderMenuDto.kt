@@ -1,6 +1,9 @@
 package com.kitchenforce.domain.orders.dto
 
+import javax.validation.constraints.Min
+
 data class OrderMenuDto(
-    var quantity: Long = 0,
-    var menuName: String = ""
+    @Min(0)
+    val quantity: Long,
+    val menuName: String
 )

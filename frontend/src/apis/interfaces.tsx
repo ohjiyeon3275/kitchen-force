@@ -31,3 +31,16 @@ export interface MenuTableData {
     isHidden : boolean;
     menuGroup?: MenuGroupResponse[]|null;
 }
+
+export interface DeliveryResponse {
+    id? : number | null;
+    address: String;
+    phoneNumber: String;
+    deliveryStatus: String,
+    note: String
+}
+
+export interface DeliveryRequest {
+    id? : number | null;
+    deliveryStatus: String,
+}
