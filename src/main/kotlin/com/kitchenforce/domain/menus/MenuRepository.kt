@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface MenuRepository : JpaRepository<Menu, Int> {
 
     fun findByName(name: String): Menu?
+    fun findByNameAndHidden(name: String, hidden: Boolean): Menu?
 }

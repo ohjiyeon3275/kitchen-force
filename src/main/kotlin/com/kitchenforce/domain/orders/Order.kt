@@ -4,6 +4,7 @@ import com.kitchenforce.common.entity.AuditEntity
 import com.kitchenforce.domain.delivery.Delivery
 import com.kitchenforce.domain.enum.OrderStatus
 import com.kitchenforce.domain.enum.OrderType
+import com.kitchenforce.domain.orders.dto.OrderDto
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -48,4 +49,32 @@ class Order(
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
     lateinit var orderMenuList: List<OrderMenu>
+
+    companion object {
+        fun generateTableOrder(
+            orderType: OrderType,
+            paymentMethod: String,
+            paymentPrice: Long?,
+            requirement: String
+        ): Order = Order(
+            orderStatus = OrderStatus.WAITING,
+            orderType = orderType,
+            paymentMethod = paymentMethod,
+            paymentPrice = paymentPrice ?: 0,
+            requirement = requirement,
+            delivery = null
+
+        )
+    }
+
+    fun toOrderDto(): OrderDto = OrderDto(
+        orderType = orderType,
+        orderStatus = orderStatus,
+        paymentMethod = paymentMethod,
+        requirement = requirement,
+        price = paymentPrice,
+        delivery = delivery ?: Delivery(-1, "", "", ""),
+        orderTableDto = null,
+        orderMenuDtoList = ArrayList()
+    )
 }
