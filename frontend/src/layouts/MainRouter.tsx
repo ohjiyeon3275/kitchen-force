@@ -6,6 +6,7 @@ import {KitchenMenu} from "../components/Menu/KitchenMenu";
 import {Order} from "../components/Order/Order";
 import { Delivery, DeliveryList } from "../components/Delivery/index";
 import {KitchenForceMain} from "../components/Main/KitchenForceMain";
+import OrderTable from "../components/Order/OrderTable";
 
 interface MainRoute {
     key: string;
@@ -52,10 +53,17 @@ export const routeList : MainRoute[] = [
         imageUrl: 'https://cdn-icons-png.flaticon.com/512/849/849588.png',
         subRouteList: [
             {
+                key: 'overall-order',
+                path: '/overall',
+                title: '주문 현황 관리',
+                component : <Order/>,
+
+            },
+            {
                 key: 'table-order',
                 path: '/table',
-                title: '테이블 주문',
-                component : <Order/>,
+                title: '테이블 주문 현황',
+                component : <OrderTable/>,
 
             },
             {

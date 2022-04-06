@@ -10,6 +10,28 @@ export interface ProductRequest {
     price? : number;
 }
 
+export interface MenuGroupResponse {
+    id : number;
+    name : string;
+}
+
+export interface MenuResponse {
+    id? : number | null;
+    name : string;
+    price : number;
+    isHidden : boolean;
+    menuGroup: MenuGroupResponse;
+}
+
+export interface MenuTableData {
+    key : React.Key;
+    id : number;
+    name : string;
+    price : number;
+    isHidden : boolean;
+    menuGroup?: MenuGroupResponse[]|null;
+}
+
 export interface DeliveryResponse {
     id? : number | null;
     address: String;
