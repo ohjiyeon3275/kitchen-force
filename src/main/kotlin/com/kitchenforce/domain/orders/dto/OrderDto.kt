@@ -11,6 +11,7 @@ data class OrderDto(
     val paymentMethod: String,
     val requirement: String,
     val delivery: Delivery,
+    val price: Long?,
     @Valid
     val orderTableDto: OrderTableDto?,
     @Valid
