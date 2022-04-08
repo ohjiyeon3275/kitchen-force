@@ -24,3 +24,8 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+
+kitchen:
+  slangwords: >
+    청둥오리버들,
+    수선화
