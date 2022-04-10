@@ -2,12 +2,15 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 ext["log4j2.version"] = "2.17.1"
 
+val kotlinVersion = "1.6.0" // coroutine 호환을 위해 버전 다운그레이드
+
 plugins {
+    val kotlinVersion = "1.6.10"
     id("org.springframework.boot") version "2.6.2"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    kotlin("jvm") version "1.6.10"
-    kotlin("plugin.spring") version "1.6.10"
-    kotlin("plugin.jpa") version "1.6.10"
+    kotlin("jvm") version kotlinVersion
+    kotlin("plugin.spring") version kotlinVersion
+    kotlin("plugin.jpa") version kotlinVersion
 }
 
 group = "com"
@@ -20,6 +23,7 @@ repositories {
 
 dependencies {
     implementation("org.springdoc:springdoc-openapi-ui:1.6.6")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
