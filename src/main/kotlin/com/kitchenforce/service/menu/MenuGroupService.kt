@@ -1,4 +1,4 @@
-package com.kitchenforce.service
+package com.kitchenforce.service.menu
 
 import com.kitchenforce.domain.menus.MenuGroup
 import com.kitchenforce.domain.menus.MenuGroupRepository

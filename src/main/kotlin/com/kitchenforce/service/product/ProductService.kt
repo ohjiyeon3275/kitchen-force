@@ -1,4 +1,4 @@
-package com.kitchenforce.service
+package com.kitchenforce.service.product
 
 import com.kitchenforce.common.exception.NotFoundException
 import com.kitchenforce.domain.products.entities.Product

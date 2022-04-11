@@ -1,4 +1,4 @@
-package com.kitchenforce.service
+package com.kitchenforce.service.delivery
 
 import com.kitchenforce.domain.delivery.Delivery
 import com.kitchenforce.domain.delivery.DeliveryRepository
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class DeliveryService(
-    val deliveryRepository : DeliveryRepository,
+    val deliveryRepository: DeliveryRepository,
 ) {
     fun updateStatusToComplete(deliveryId: Long): Delivery {
 
@@ -24,6 +24,4 @@ class DeliveryService(
     fun getDeliveryList(): List<Delivery> {
         return deliveryRepository.findAll()
     }
-
-
 }

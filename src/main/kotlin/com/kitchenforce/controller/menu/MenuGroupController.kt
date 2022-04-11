@@ -1,7 +1,7 @@
-package com.kitchenforce.controller
+package com.kitchenforce.controller.menu
 
 import com.kitchenforce.domain.menus.MenuGroup
-import com.kitchenforce.service.MenuGroupService
+import com.kitchenforce.service.menu.MenuGroupService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
