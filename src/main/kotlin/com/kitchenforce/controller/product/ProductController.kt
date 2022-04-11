@@ -1,8 +1,8 @@
-package com.kitchenforce.controller
+package com.kitchenforce.controller.product
 
 import com.kitchenforce.domain.products.entities.Product
-import com.kitchenforce.service.ProductService
-import org.springframework.web.bind.annotation.*
+import com.kitchenforce.service.product.ProductService
+import org.springframework.web.bind.annotation.* // ktlint-disable no-wildcard-imports
 import javax.validation.Valid
 
 @RestController

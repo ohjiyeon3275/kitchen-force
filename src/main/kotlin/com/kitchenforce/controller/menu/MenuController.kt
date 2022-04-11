@@ -1,12 +1,12 @@
-package com.kitchenforce.controller
+package com.kitchenforce.controller.menu
 
 import com.kitchenforce.domain.menus.Menu
 import com.kitchenforce.dto.menus.MenuCreateRequestDto
-import com.kitchenforce.service.MenuService
+import com.kitchenforce.service.menu.MenuService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.* // ktlint-disable no-wildcard-imports
 import javax.validation.Valid
 
 @Tag(name = "Menu")
@@ -19,7 +19,7 @@ class MenuController(
     @Operation(summary = "하나 이상의 상품으로 메뉴를 생성합니다.")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{menuGroup}")
-    fun menuCreate(@RequestBody @Valid req: MenuCreateRequestDto, @PathVariable menuGroup: Int){
+    fun menuCreate(@RequestBody @Valid req: MenuCreateRequestDto, @PathVariable menuGroup: Int) {
         menuService.createMenu(req, menuGroup)
     }
 

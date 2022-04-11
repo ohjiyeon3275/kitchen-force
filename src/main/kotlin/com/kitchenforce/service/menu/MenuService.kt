@@ -1,7 +1,7 @@
-package com.kitchenforce.service
+package com.kitchenforce.service.menu
 
 import com.kitchenforce.common.exception.NotFoundException
-import com.kitchenforce.domain.menus.*
+import com.kitchenforce.domain.menus.* // ktlint-disable no-wildcard-imports
 import com.kitchenforce.domain.products.entities.ProductRepository
 import com.kitchenforce.dto.menus.MenuCreateRequestDto
 import org.springframework.data.repository.findByIdOrNull

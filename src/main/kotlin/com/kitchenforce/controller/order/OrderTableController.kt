@@ -1,9 +1,9 @@
-package com.kitchenforce.controller
+package com.kitchenforce.controller.order
 
 import com.kitchenforce.domain.orders.dto.OrderTableDto
-import com.kitchenforce.service.OrderTableService
+import com.kitchenforce.service.order.OrderTableService
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.* // ktlint-disable no-wildcard-imports
 import javax.validation.constraints.Min
 
 @Validated
@@ -15,7 +15,7 @@ class OrderTableController(
 
     @GetMapping("")
     fun getOrderTableList(): List<OrderTableDto> {
-        return orderTableService.get()
+        return orderTableService.getAll()
     }
 
     @GetMapping("/{tableName}")
@@ -25,6 +25,6 @@ class OrderTableController(
 
     @PutMapping("/{numberOfGuests}/{tableName}")
     fun updateNumberOfGuests(@PathVariable @Min(0) numberOfGuests: Int, @PathVariable tableName: String) {
-        orderTableService.update(numberOfGuests, tableName)
+        orderTableService.updateOccupiedTable(numberOfGuests, tableName)
     }
 }

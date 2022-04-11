@@ -1,7 +1,7 @@
 package com.kitchenforce.domain.orders
 
 import com.kitchenforce.common.entity.AuditEntity
-import javax.persistence.*
+import javax.persistence.* // ktlint-disable no-wildcard-imports
 
 @Entity
 class OrderTable(
@@ -17,7 +17,7 @@ class OrderTable(
 
     @OneToOne
     @JoinColumn(name = "orders_id")
-    var order: Order,
+    var order: Order?,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

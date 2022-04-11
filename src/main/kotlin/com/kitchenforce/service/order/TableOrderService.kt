@@ -1,4 +1,4 @@
-package com.kitchenforce.service
+package com.kitchenforce.service.order
 
 import com.kitchenforce.common.exception.NotFoundException
 import com.kitchenforce.domain.enum.OrderStatus
@@ -7,7 +7,6 @@ import com.kitchenforce.domain.orders.Order
 import com.kitchenforce.domain.orders.OrderMenu
 import com.kitchenforce.domain.orders.OrderMenuRepository
 import com.kitchenforce.domain.orders.OrderRepository
-import com.kitchenforce.domain.orders.OrderTable
 import com.kitchenforce.domain.orders.OrderTableRepository
 import com.kitchenforce.domain.orders.dto.OrderDto
 import com.kitchenforce.domain.orders.exception.OrderErrorCodeType
@@ -37,12 +36,14 @@ class TableOrderService(
                 )
             )
 
-            val orderTable = OrderTable(
-                name = orderDto.orderTableDto?.tableName ?: "테이블 지정 안됨.",
-                emptiness = orderDto.orderTableDto?.emptiness ?: true,
-                numberOfGuests = orderDto.orderTableDto?.numberOfGuests ?: 0,
-                order = newOrder
-            )
+            val orderTable = orderTableRepository.findByNameAndEmptiness(
+                orderDto.orderTableDto?.tableName ?: "테이블 지정 안됨.",
+                true,
+            )?.apply {
+                this.order = newOrder
+                this.numberOfGuests = orderDto.orderTableDto?.numberOfGuests ?: 0
+                this.emptiness = false
+            } ?: throw NotFoundException(errorMessage = "테이블 조회에 실패하였습니다.")
 
             val orderMenuList = orderDto.orderMenuDtoList.map {
                 OrderMenu(

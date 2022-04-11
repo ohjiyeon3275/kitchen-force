@@ -23,7 +23,9 @@ private val log = KotlinLogging.logger { }
 @Disabled // 필요할 때 주석
 class SlangDictionaryPerformanceTest(
     @Value("\${kitchen.slangwords}")
-    val slangList: Array<String>
+    val slangList: Array<String>,
+
+    val slangDictionary: SlangDictionary
 ) {
 
     val testExpression = "--히어리--"
@@ -45,7 +47,7 @@ class SlangDictionaryPerformanceTest(
     @Order(1)
     fun coroutineSlangDicTest() {
         stopWatch.start()
-        val result = SlangDictionary.isSlang(testExpression)
+        val result = slangDictionary.isSlang(testExpression)
         stopWatch.stop()
         println(stopWatch.prettyPrint())
         assertFalse(result)
@@ -67,7 +69,7 @@ class SlangDictionaryPerformanceTest(
     @Order(3)
     fun coroutineSlangDicTest2() {
         stopWatch.start()
-        val result = SlangDictionary.isSlang(testSlangExpression)
+        val result = slangDictionary.isSlang(testSlangExpression)
         stopWatch.stop()
         println(stopWatch.prettyPrint())
         assertTrue(result)

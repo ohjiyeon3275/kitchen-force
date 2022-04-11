@@ -1,4 +1,4 @@
-package com.kitchenforce.service
+package com.kitchenforce.service.order
 
 import com.kitchenforce.domain.orders.OrderTableRepository
 import com.kitchenforce.domain.orders.dto.OrderTableDto
@@ -12,7 +12,7 @@ class OrderTableService(
     private val orderTableRepository: OrderTableRepository,
 ) {
 
-    fun get(): List<OrderTableDto> = orderTableRepository.findAll().map {
+    fun getAll(): List<OrderTableDto> = orderTableRepository.findAll().map {
         OrderTableDto(
             emptiness = it.emptiness,
             tableName = it.name,
@@ -21,7 +21,7 @@ class OrderTableService(
     }
 
     fun get(tableName: String): OrderTableDto? =
-        orderTableRepository.findByNameAndEmptiness(tableName, false)?.run {
+        orderTableRepository.findByNameAndEmptiness(tableName, true)?.run {
             OrderTableDto(
                 tableName = this.name,
                 emptiness = this.emptiness,
@@ -30,7 +30,7 @@ class OrderTableService(
         }
 
     @Transactional
-    fun update(numberOfGuests: Int, tableName: String) {
+    fun updateOccupiedTable(numberOfGuests: Int, tableName: String) {
         orderTableRepository.findByNameAndEmptiness(tableName, false)?.let {
             it.numberOfGuests = numberOfGuests
             orderTableRepository.save(it)
