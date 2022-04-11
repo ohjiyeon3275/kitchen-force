@@ -1,7 +1,7 @@
 package com.kitchenforce.service.order
 
 import com.kitchenforce.common.exception.NotFoundException
-import com.kitchenforce.domain.enum.OrderStatus
+import com.kitchenforce.domain.enums.OrderStatus
 import com.kitchenforce.domain.menus.MenuRepository
 import com.kitchenforce.domain.orders.Order
 import com.kitchenforce.domain.orders.OrderMenu

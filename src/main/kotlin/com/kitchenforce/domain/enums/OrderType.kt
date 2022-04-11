@@ -1,4 +1,4 @@
-package com.kitchenforce.domain.enum
+package com.kitchenforce.domain.enums
 
 enum class OrderType(
     val title: String

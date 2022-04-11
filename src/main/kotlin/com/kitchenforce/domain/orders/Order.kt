@@ -2,8 +2,8 @@ package com.kitchenforce.domain.orders
 
 import com.kitchenforce.common.entity.AuditEntity
 import com.kitchenforce.domain.delivery.Delivery
-import com.kitchenforce.domain.enum.OrderStatus
-import com.kitchenforce.domain.enum.OrderType
+import com.kitchenforce.domain.enums.OrderStatus
+import com.kitchenforce.domain.enums.OrderType
 import com.kitchenforce.domain.orders.dto.OrderDto
 import javax.persistence.Column
 import javax.persistence.Entity

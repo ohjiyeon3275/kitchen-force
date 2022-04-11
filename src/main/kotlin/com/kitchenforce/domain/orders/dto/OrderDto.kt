@@ -1,8 +1,8 @@
 package com.kitchenforce.domain.orders.dto
 
 import com.kitchenforce.domain.delivery.Delivery
-import com.kitchenforce.domain.enum.OrderStatus
-import com.kitchenforce.domain.enum.OrderType
+import com.kitchenforce.domain.enums.OrderStatus
+import com.kitchenforce.domain.enums.OrderType
 import javax.validation.Valid
 
 data class OrderDto(

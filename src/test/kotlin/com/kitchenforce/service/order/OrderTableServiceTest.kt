@@ -1,7 +1,7 @@
 package com.kitchenforce.service.order
 
-import com.kitchenforce.domain.enum.OrderStatus
-import com.kitchenforce.domain.enum.OrderType
+import com.kitchenforce.domain.enums.OrderStatus
+import com.kitchenforce.domain.enums.OrderType
 import com.kitchenforce.domain.orders.Order
 import com.kitchenforce.domain.orders.OrderRepository
 import com.kitchenforce.domain.orders.OrderTable
