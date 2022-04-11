@@ -36,7 +36,7 @@
 ![](./image/ktlint.png)
 * 가급적 리팩토링/기능개발 후 단위테스트를 작성해주시는걸 권장드립니다. 테스트실패시 PR-Merge가 불가능 합니다.
   * 커버리지 100%를 지향하면 좋겠지만, 현실적으로 그건 어려우니 최대한 의식적으로 테스트에 신경쓰면서 개발하도록 합니다.
-    * [이런거나](https://www.youtube.com/watch?v=cVxqrGHxutU) , [요런것](https://www.youtube.com/watch?v=jdlBu2vFv58)들은 관심이 있으신 분들이라면 도전해보아도 좋습니다!
+    * [이런거](https://www.youtube.com/watch?v=cVxqrGHxutU)라든지, [요런것](https://www.youtube.com/watch?v=jdlBu2vFv58)들은 관심이 있으신 분들이라면 도전해보아도 좋습니다!
   * 4/12 기준으로 테스트가 많이 빈약합니다. 토이 프로젝트라서 테스트에 대한 관심을 많이 두지 않아 기술부채로 남아있는데 시간 날때마다 짬짬이 매꿔보도록 하겠습니다.
 ![](./image/github-action-test-break-1.png)
 ![](./image/github-action-test-break-2.png)
