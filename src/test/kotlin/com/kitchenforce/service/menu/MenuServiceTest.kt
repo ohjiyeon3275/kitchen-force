@@ -76,6 +76,6 @@ class MenuServiceTest @Autowired constructor(
     @DisplayName("전체 조회 테스트")
     fun findAllTest() {
         val result = menuService.findAll()
-        assertEquals(testMenuList.size - 1, result.size)
+        assertEquals(testMenuList.size, result.size)
     }
 }
