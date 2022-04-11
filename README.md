@@ -48,3 +48,8 @@ cd frontend
 npm install
 npm start run
 ```
+
+### 단위테스트 실행
+```
+$ gradlew test
+```
