@@ -3,7 +3,9 @@ package com.kitchenforce.domain.menus
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.kitchenforce.common.utils.SlangDictionary
 import com.kitchenforce.configuration.ObjectMapperConfig
+import com.kitchenforce.configuration.SlangDictionaryConfig
 import com.kitchenforce.domain.products.entities.Product
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -21,11 +23,13 @@ import javax.persistence.EntityManagerFactory
 @DataJpaTest
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Import(ObjectMapperConfig::class)
+@Import(ObjectMapperConfig::class, SlangDictionaryConfig::class)
 class MenuProductTest @Autowired constructor(
     val emf: EntityManagerFactory,
     @Qualifier("commonObjectMapper")
-    val objectMapper: ObjectMapper
+    val objectMapper: ObjectMapper,
+    @Qualifier("slangDictionary")
+    val slangDictionary: SlangDictionary
 ) {
 
     @BeforeAll
@@ -53,7 +57,7 @@ class MenuProductTest @Autowired constructor(
             em.persist(menuGroup)
             val menu = Menu(null, "샘플 매뉴", 100, false, menuGroup)
             em.persist(menu)
-            val product = Product(null, "샘플 상품", 100)
+            val product = Product(null, "샘플 상품", 100, slangDictionary)
             em.persist(product)
             val menuProduct = MenuProduct(null, 100, menu, product)
             em.persist(menuProduct)

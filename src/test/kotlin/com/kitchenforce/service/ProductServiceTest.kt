@@ -1,6 +1,7 @@
 package com.kitchenforce.service
 
 import com.kitchenforce.common.exception.NotFoundException
+import com.kitchenforce.common.utils.SlangDictionary
 import com.kitchenforce.domain.products.entities.Product
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Nested
@@ -15,7 +16,8 @@ import javax.validation.ConstraintViolationException
 @SpringBootTest
 @ActiveProfiles("test")
 internal class ProductServiceTest @Autowired constructor(
-    private val service: ProductService
+    val service: ProductService,
+    val slangDictionary: SlangDictionary
 ) {
 
     @Nested
@@ -26,6 +28,7 @@ internal class ProductServiceTest @Autowired constructor(
             val vo = Product(
                 name = "제품1",
                 price = 100,
+                slangDictionary = slangDictionary
             )
             service.create(vo)
 
@@ -39,6 +42,7 @@ internal class ProductServiceTest @Autowired constructor(
             val vo = Product(
                 name = "제품1",
                 price = -1,
+                slangDictionary = slangDictionary
             )
             assertThrows<ConstraintViolationException> {
                 service.create(vo)
@@ -51,8 +55,8 @@ internal class ProductServiceTest @Autowired constructor(
     inner class ProductUpdateService {
         @Test
         fun update_정상_실행() {
-            val created = service.create(Product(name = "제품1", price = 100))
-            service.update(created.id!!, Product(name = created.name, price = 999))
+            val created = service.create(Product(name = "제품1", price = 100, slangDictionary = slangDictionary))
+            service.update(created.id!!, Product(name = created.name, price = 999, slangDictionary = slangDictionary))
 
             val list = service.findAll()
             assertEquals(list.size, 1)
@@ -63,7 +67,7 @@ internal class ProductServiceTest @Autowired constructor(
         @Test
         fun update_인자의_id에_해당하는_상품이_없는_경우() {
             assertThrows<NotFoundException> {
-                service.update(999, Product(name = "제품1", price = 100))
+                service.update(999, Product(name = "제품1", price = 100, slangDictionary = slangDictionary))
             }
         }
     }

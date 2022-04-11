@@ -27,7 +27,10 @@ class Product(
 
     @Column
     @field:PositiveOrZero(message = "상품의 가격은 0보다 작을 수 없습니다.")
-    var price: Int
+    var price: Int,
+
+    @Transient
+    val slangDictionary: SlangDictionary
 
 ) : AuditEntity() {
     init {
@@ -35,7 +38,7 @@ class Product(
     }
 
     private fun checkValidProductName() {
-        if (SlangDictionary.isSlang(name))
+        if (slangDictionary.isSlang(name))
             throw ProductException(ProductErrorCodeType.INVALID_PRODUCT_NAME)
     }
 }
