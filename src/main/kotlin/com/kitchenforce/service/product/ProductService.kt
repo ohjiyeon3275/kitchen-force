@@ -1,6 +1,8 @@
 package com.kitchenforce.service.product
 
 import com.kitchenforce.common.exception.NotFoundException
+import com.kitchenforce.common.utils.SlangDictionary
+import com.kitchenforce.domain.products.dtos.ProductDto
 import com.kitchenforce.domain.products.entities.Product
 import com.kitchenforce.domain.products.entities.ProductRepository
 import org.springframework.data.repository.findByIdOrNull
@@ -10,9 +12,10 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class ProductService(
     private val productRepository: ProductRepository,
+    private val slangDictionary: SlangDictionary,
 ) {
-    fun findAll(): List<Product> {
-        return productRepository.findAll()
+    fun findAll(): List<ProductDto> {
+        return productRepository.findAll().map { it.toDto() }
     }
 
     private fun findById(id: Long): Product {
@@ -21,16 +24,16 @@ class ProductService(
     }
 
     @Transactional
-    fun create(vo: Product): Product {
-        return productRepository.save(vo)
+    fun create(dto: ProductDto): ProductDto {
+        return productRepository.save(Product.fromDto(dto, slangDictionary)).toDto()
     }
 
     @Transactional
-    fun update(id: Long, data: Product): Product {
-        return findById(id).let {
-            it.name = data.name
-            it.price = data.price
-            return productRepository.save(it)
-        }
-    }
+    fun update(id: Long, dto: ProductDto): ProductDto =
+        findById(id).run {
+            this.slangDictionary = slangDictionary
+            this.name = dto.name
+            this.price = dto.price
+            productRepository.save(this)
+        }.toDto()
 }
