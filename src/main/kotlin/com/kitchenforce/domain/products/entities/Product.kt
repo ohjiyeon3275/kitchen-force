@@ -1,7 +1,9 @@
 package com.kitchenforce.domain.products.entities
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.kitchenforce.common.entity.AuditEntity
 import com.kitchenforce.common.utils.SlangDictionary
+import com.kitchenforce.domain.products.dtos.ProductDto
 import com.kitchenforce.domain.products.exception.ProductErrorCodeType
 import com.kitchenforce.domain.products.exception.ProductException
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -12,7 +14,6 @@ import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.Table
-import javax.validation.constraints.PositiveOrZero
 
 @Entity
 @Table
@@ -26,19 +27,34 @@ class Product(
     var name: String,
 
     @Column
-    @field:PositiveOrZero(message = "상품의 가격은 0보다 작을 수 없습니다.")
     var price: Int,
 
     @Transient
-    val slangDictionary: SlangDictionary
+    @JsonIgnore
+    var slangDictionary: SlangDictionary?
 
 ) : AuditEntity() {
     init {
         checkValidProductName()
     }
 
-    private fun checkValidProductName() {
-        if (slangDictionary.isSlang(name))
-            throw ProductException(ProductErrorCodeType.INVALID_PRODUCT_NAME)
+    companion object {
+        fun fromDto(dto: ProductDto, dictionary: SlangDictionary): Product = Product(
+            id = dto.id,
+            name = dto.name,
+            price = dto.price,
+            slangDictionary = dictionary
+        )
     }
+
+    private fun checkValidProductName() = slangDictionary?.run {
+        if (isSlang(name))
+            throw ProductException(ProductErrorCodeType.INVALID_PRODUCT_NAME)
+    } ?: throw ProductException(ProductErrorCodeType.INIT_SLANG_DICT_FAILED)
+
+    fun toDto(): ProductDto = ProductDto(
+        id = id,
+        name = name,
+        price = price
+    )
 }

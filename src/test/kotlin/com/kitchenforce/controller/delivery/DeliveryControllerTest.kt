@@ -1,5 +1,9 @@
-package com.kitchenforce.domain.delivery
+package com.kitchenforce.controller.delivery
 
+import com.kitchenforce.domain.delivery.Delivery
+import com.kitchenforce.domain.delivery.DeliveryRepository
+import com.kitchenforce.domain.delivery.Rider
+import com.kitchenforce.domain.delivery.RiderRepository
 import com.kitchenforce.domain.delivery.exception.DeliveryErrorCodeType
 import com.kitchenforce.domain.delivery.exception.DeliveryException
 import org.junit.jupiter.api.DisplayName
@@ -73,5 +77,4 @@ internal class DeliveryControllerTest @Autowired constructor(
                 status { DeliveryException(DeliveryErrorCodeType.NOT_FOUND_DELIVERY) }
             }
     }
-
 }

@@ -34,10 +34,13 @@
   * 이전에는 인원이 많이 없어서 코드리뷰를 많이 생략했지만, 참여 인원이 많은 만큼 적어도 1명 이상의 리뷰확인 프로세스를 도입해보는게 어떨까 싶네요
 * Intellij Plugin KtLint를 설치해주시고, Push 전에 린트 체크 부탁드립니다.
 ![](./image/ktlint.png)
-* 가급적 리팩토링/기능개발 후 단위테스트를 작성해주시는걸 권장드립니다. 테스트실패시 PR-Merge가 불가능 합니다.
+* 가급적 리팩토링/기능개발 후 **단위테스트**를 작성해주시는걸 권장드립니다. 테스트실패시 PR-Merge가 불가능 합니다.
   * 커버리지 100%를 지향하면 좋겠지만, 현실적으로 그건 어려우니 최대한 의식적으로 테스트에 신경쓰면서 개발하도록 합니다.
     * [이런거(TDD 연습)](https://www.youtube.com/watch?v=cVxqrGHxutU)라든지, [요런것(커버리지 100%)](https://www.youtube.com/watch?v=jdlBu2vFv58)들에 대해서 관심이 있으신 분들이라면 제가 능력이 되는 한 최대한 서포트 해드리겠습니다.
   * 4/12 기준으로 테스트가 많이 빈약합니다. 토이 프로젝트라서 테스트에 대한 관심을 많이 두지 않아 기술부채로 남아있는데 시간 날때마다 짬짬이 매꿔보도록 하겠습니다.
+  * 참고
+    * https://www.baeldung.com/kotlin/spring-boot-testing
+    * https://techblog.woowahan.com/5825/
 ![](./image/github-action-test-break-1.png)
 ![](./image/github-action-test-break-2.png)
 * Table 추가시 PK는 `Auto-Increment(Sequence)` 를 원칙으로 합니다.

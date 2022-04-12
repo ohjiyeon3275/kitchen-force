@@ -1,4 +1,4 @@
-package com.kitchenforce.controller.product
+package com.kitchenforce.controller.order
 
 import com.kitchenforce.domain.orders.dto.OrderDto
 import com.kitchenforce.service.order.AbstractOrderService
