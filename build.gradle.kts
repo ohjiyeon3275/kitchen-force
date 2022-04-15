@@ -11,6 +11,7 @@ plugins {
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
     kotlin("plugin.jpa") version kotlinVersion
+    id("org.asciidoctor.convert") version "1.6.0" // Gradle 7 버전에서는 버그가 있는듯함... 6 버전으로 다운그레이드..
 }
 
 group = "com"
@@ -36,6 +37,8 @@ dependencies {
     testImplementation("com.h2database:h2")
     testImplementation("io.mockk:mockk:1.12.2")
     testImplementation("com.ninja-squad:springmockk:3.1.1")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    asciidoctor("org.springframework.restdocs:spring-restdocs-asciidoctor") // 1
 }
 
 tasks.withType<KotlinCompile> {
@@ -45,17 +48,34 @@ tasks.withType<KotlinCompile> {
     }
 }
 
+val snippetsDir by extra { file("build/generated-snippets") } // 변수 변경
+
 tasks.withType<Test> {
     useJUnitPlatform()
+    outputs.dir(snippetsDir)
 }
 
-tasks.register("bootRunLocal") {
-    group = "application"
-    description = "Runs this project as a Spring Boot application with the dev profile"
-    doFirst {
-        tasks.bootRun.configure {
-            systemProperty("spring.profiles.active", "local")
-        }
-    }
-    finalizedBy("bootRun")
+/* for spring rest doc*/
+
+val asciidoctorTask = tasks.getByName("asciidoctor") as org.asciidoctor.gradle.AsciidoctorTask
+tasks.withType<org.asciidoctor.gradle.AsciidoctorTask> {
+//    inputs.dir(snippetsDir)
+    dependsOn(tasks.withType<Test>())
+    attributes["snippets"] = snippetsDir
 }
+
+tasks.register("copyHTML", Copy::class) { // 3
+    dependsOn(tasks.withType<org.asciidoctor.gradle.AsciidoctorTask>())
+    from(file("build/asciidoc/html5"))
+    into(file("src/main/resources/static/docs"))
+}
+
+tasks.build { // 4
+    dependsOn(tasks.getByName("copyHTML"))
+}
+
+tasks.bootJar { // 5
+    dependsOn(tasks.withType<org.asciidoctor.gradle.AsciidoctorTask>())
+    dependsOn(tasks.getByName("copyHTML"))
+}
+/* for spring rest doc*/
