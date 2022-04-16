@@ -1,0 +1,36 @@
+=== Get Product By Id
+Obtains a specific products by its unique identifier.
+
+== 메뉴 생성
+
+==== Sample Request
+include::{snippets}/create-menu/http-request.adoc[]
+
+==== Sample Response
+include::{snippets}/create-menu/http-response.adoc[]
+
+==== CURL sample
+include::{snippets}/create-menu/curl-request.adoc[]
+
+==== Path Parameters
+include::{snippets}/create-menu/path-parameters.adoc[]
+
+==== Response Fields
+include::{snippets}/create-menu/response-fields.adoc[]
+
+== 메뉴 목록 조회
+
+==== Sample Request
+include::{snippets}/get-menu-list/http-request.adoc[]
+
+==== Sample Response
+include::{snippets}/get-menu-list/http-response.adoc[]
+
+==== CURL sample
+include::{snippets}/get-menu-list/curl-request.adoc[]
+
+==== Path Parameters
+include::{snippets}/get-menu-list/path-parameters.adoc[]
+
+==== Response Fields
+include::{snippets}/get-menu-list/response-fields.adoc[]
