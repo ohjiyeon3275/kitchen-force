@@ -43,14 +43,3 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
-
-tasks.register("bootRunLocal") {
-    group = "application"
-    description = "Runs this project as a Spring Boot application with the dev profile"
-    doFirst {
-        tasks.bootRun.configure {
-            systemProperty("spring.profiles.active", "local")
-        }
-    }
-    finalizedBy("bootRun")
-}

@@ -13,7 +13,6 @@ class DeliveryController(
 
     @GetMapping("/list")
     fun getDeliveryList(): List<Delivery> {
-        println("list 들어욤")
         return deliveryService.getDeliveryList()
     }
 

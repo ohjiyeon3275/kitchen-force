@@ -3,11 +3,15 @@ package com.kitchenforce.service
 import com.kitchenforce.common.exception.NotFoundException
 import com.kitchenforce.domain.delivery.Delivery
 import com.kitchenforce.domain.delivery.DeliveryRepository
+import com.kitchenforce.domain.delivery.RiderRepository
+import com.kitchenforce.domain.delivery.exception.DeliveryErrorCodeType
+import com.kitchenforce.domain.delivery.exception.DeliveryException
 import com.kitchenforce.domain.enum.OrderStatus
 import com.kitchenforce.domain.enum.OrderType
 import com.kitchenforce.domain.menus.MenuRepository
 import com.kitchenforce.domain.orders.*
 import com.kitchenforce.domain.orders.dto.OrderDto
+import org.apache.tomcat.jni.Time
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -18,10 +22,11 @@ class OrderService(
     private val orderTableRepository: OrderTableRepository,
     private val orderMenuRepository: OrderMenuRepository,
     private val menuRepository: MenuRepository,
-    private val deliveryAddressRepository: DeliveryRepository
+    private val deliveryRepository: DeliveryRepository,
+    private val riderRepository: RiderRepository,
 ) {
     @Transactional
-    fun create(dto: OrderDto) {
+    suspend fun create(dto: OrderDto) {
 
         val order = Order(
             orderStatus = OrderStatus.WAITING,
@@ -29,19 +34,21 @@ class OrderService(
             paymentMethod = dto.paymentMethod,
             paymentPrice = 0,
             requirement = dto.requirement,
-            delivery = deliveryAddressRepository.findByAddress(dto.delivery.address)
+            delivery = deliveryRepository.findByAddress(dto.delivery.address)
         )
 
-        val testDeliveryAddress = Delivery(
-            deliveryStatus = "주문완료",
-            address = "주소",
-            note = "리뷰이벤트",
-        )
 
-        val saved = orderRepository.save(order)
-        println("저장되었습니다.")
-        println(saved.id)
-        println(saved.orderType)
+        if(order.orderType == OrderType.DELIVERY) {
+
+            // db갔다오면 2초씩 ++
+            // 주소체크 및 저장
+            deliverySave(dto.delivery, order)
+
+            // 라이더 조회 & 호출
+            riderCall(dto.delivery, 1)
+        }
+
+        orderRepository.save(order)
 
         if (dto.orderType == OrderType.EATIN) {
             val orderTable = OrderTable(
@@ -63,6 +70,38 @@ class OrderService(
                 menu = menuRepository.findByName(it.menuName) ?: throw NotFoundException("메뉴가 존재하지 않습니다.")
             )
         }.also { orderMenuRepository.saveAll(it) }
+    }
+
+    suspend fun deliverySave(dtoDelivery: Delivery, order: Order) {
+
+        val delivery = Delivery(
+            deliveryStatus = "주문접수",
+            address = dtoDelivery.address,
+            note = dtoDelivery.note,
+        )
+
+        if(order.delivery == null) {
+            Time.sleep(2000)
+            deliveryRepository.save(delivery)
+        }
+    }
+
+    suspend fun riderCall(dtoDelivery: Delivery, riderId: Long) {
+
+
+        val riderOptional = riderRepository.findById(riderId)
+        Time.sleep(2000)
+
+        if(!riderOptional.isPresent){
+            throw DeliveryException(DeliveryErrorCodeType.NOT_FOUND_RIDER)
+        }
+        val rider = riderOptional.get()
+
+        rider.deliveries?.toMutableList()?.add(dtoDelivery)
+
+        riderRepository.save(rider)
+        Time.sleep(2000)
+
     }
 
     fun get(): List<OrderDto> {
@@ -102,4 +141,5 @@ class OrderService(
             orderRepository.save(order)
         } ?: throw NotFoundException("주문이 존재하지 않습니다.")
     }
+
 }
